@@ -1,4 +1,4 @@
-# PLDAC-Football&Apprentissage
+# Football-Apprentissage
 
 ### Start the server
 
