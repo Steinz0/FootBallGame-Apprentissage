@@ -1,4 +1,11 @@
-# PLDAC-Football&Apprentissage
+# Football-Apprentissage
+
+### Start the server
+
+To start the web server, you just need to start this commmand : 
+```
+node app.js
+```
 
 ### Membres du binôme
   - KRISNI Almehdi
