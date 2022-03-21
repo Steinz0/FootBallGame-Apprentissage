@@ -1,0 +1,25 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+canvas {
+    width: 1200px;
+    height: 700px;
+}
+input[type="range"] {
+    width:1200px;
+}
+
+.score {
+    display: flex;
+    flex-direction: row;
+    font-size: larger;
+}
+.contain {
+    background-color: #2b29293b;
+}
+
+

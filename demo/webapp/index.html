@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="public/css/index.css">
+</head>
+<body>
+    <div class="score">
+        <p style="font-size: 1em;">Blue Team <span id="blueTeamScore"></span> - <span id="redTeamScore"></span> Red Team</p>
+    </div>
+    <div class="mid">
+      <div class='contain'>
+        <div class='forms' id="forms" style=>
+          <div id="name"></div>
+          <div id="x"></div>
+          <div id="y"></div>
+          <div class="choose-contain">
+            <label for="choose">Ordre</label>
+            <select id="choose" name="choose">
+              <option value="one">Ordre 1</option>
+              <option value="two">Ordre 2</option>
+              <option value="three">Ordre 3</option>
+            </select>
+            <input type="submit" value="Submit">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slidecontainer">
+      <input type="range"
+          min="0" max="2000" step=1 class="slider" value=0 id="myRange" disabled="true">
+    </div>
+    <div class="play">
+      <button class="breplay" disabled="true">REPLAY</button>
+    </div>
+
+    <script src="dist/pixi.min.js"></script>
+    <script type='module' src="/public/js/game.js"></script>
+    <script type='module' src="/public/js/classes.js"></script>
+</body>
+</html>
