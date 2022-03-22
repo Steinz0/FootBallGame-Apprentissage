@@ -5,6 +5,7 @@ let ball
 let allPlayers = []
 let blueTeam = []
 let redTeam = []
+let score = [0,0]
 
 const Application = PIXI.Application;
 
@@ -53,6 +54,13 @@ stadium.loader.onProgress.add(show);
 stadium.loader.onComplete.add(doneLoading);
 stadium.loader.load();
 
+const btn = document.getElementsByClassName("breplay")[0]; 
+btn.addEventListener("click", getData);
+
+
+const submit = document.getElementsByClassName("submit-button")[0]; 
+submit.addEventListener("click", insertData);
+
 function show(e) {
 	console.log(e.progress)
 }
@@ -94,7 +102,7 @@ function createPlayer() {
 }
 
 function gameLoop(delta) {
-	setSituation()
+	// setSituation()
 	allPlayers.forEach(function (e, i) {
 		drawLine(e.directLine, e.x, e.y, e.speed.x, e.speed.y)
 	})
@@ -136,7 +144,7 @@ function setValues(coords) {
 	if (coords != undefined){
 		let c = coords.split(" ")
 		
-		
+		score = c
 		document.getElementById("blueTeamScore").innerHTML = c[1]
 		document.getElementById("redTeamScore").innerHTML = c[0]
 
@@ -161,4 +169,43 @@ function setValues(coords) {
 			blueTeam[i].speed.y = blues_c[i*4+3]
 		}
 	}
+}
+
+async function getData(){
+    await axios.get('http://localhost:3000/db')
+    .then((data) => {
+      console.log(data)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
+
+async function insertData(){
+	const ballCoord = [ball.position.x, ball.position.y]
+	const redCoords = []
+	const blueCoords = []
+	for (let i=0; i<redTeam.length; i++) {
+		redCoords.push([redTeam[i].position.x, redTeam[i].position.y])
+		blueCoords.push([blueTeam[i].position.x, blueTeam[i].position.y])
+	}
+	const actualPlayer = [document.querySelector('#x').innerHTML, document.querySelector('#y').innerHTML]
+	const order = document.querySelector('#choose').value;
+
+	const data = {
+        ballCoord: ballCoord,
+        redCoords: redCoords,
+        blueCoords: redCoords,
+        score: score,
+        actualPlayer: actualPlayer,
+        order: order
+    }
+	console.log(data)
+	await axios.post('http://localhost:3000/db', data)
+    .then((data) => {
+      console.log(data)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 }
