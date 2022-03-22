@@ -6,7 +6,7 @@ let allPlayers = []
 let blueTeam = []
 let redTeam = []
 let score = [0,0]
-
+let play = false
 const Application = PIXI.Application;
 
 const stadium = new Application({
@@ -55,7 +55,7 @@ stadium.loader.onComplete.add(doneLoading);
 stadium.loader.load();
 
 const btn = document.getElementsByClassName("breplay")[0]; 
-btn.addEventListener("click", getData);
+btn.addEventListener("click", onOffPlay);
 
 
 const submit = document.getElementsByClassName("submit-button")[0]; 
@@ -102,7 +102,11 @@ function createPlayer() {
 }
 
 function gameLoop(delta) {
-	// setSituation()
+	if (play){
+		playGameFile()
+	}else{
+		setSituation()
+	}
 	allPlayers.forEach(function (e, i) {
 		drawLine(e.directLine, e.x, e.y, e.speed.x, e.speed.y)
 	})
@@ -138,6 +142,25 @@ function setSituation() {
         }
     }
     rawFile.send(null);
+}
+
+function onOffPlay() {
+
+	const breplay = document.getElementById("breplay");
+
+	if (play){
+		play = false;
+		breplay.innerText = "PLAY";
+		console.log('play')
+	}else{
+		play = true;
+		breplay.innerText = "PAUSE";
+		console.log('pause')
+	}
+}
+function playGameFile() {
+	document.getElementsByClassName("slider").myRange.value = parseInt(document.getElementsByClassName("slider").myRange.value) + 1
+	setSituation()
 }
 
 function setValues(coords) {
