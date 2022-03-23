@@ -2,7 +2,10 @@
 
 The file represents the positions of the players and the ball in the current match.
 
-How to read :
-- first line = reading indicator represented as a bit value (0 or 1)
-- second line = ball's position and speed vector (x y vx vy)
-- remaining lines = players' positions and speed vectors (x y vx vy)
+How to read one line :
+- 1st value : Red Team Score
+- 2nd value : Blue Team Score
+- 3rd value : Position x to the ball
+- 4th value : Position y to the ball
+- [Nb of red players] : Position x  Position y
+- [Nb of blue players] : Position x  Position y

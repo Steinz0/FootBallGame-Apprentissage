@@ -7,18 +7,10 @@ var cors      = require('cors');
 const Datastore = require('nedb');
 const spawn = require('await-spawn')
 const DB = require("./db.js");
-let file_content = ''
 
 async function callPython(req, res) {
-      
-    //let spawn = require("child_process").spawn;
-      
     let process = await spawn('python',["../gameEngine/Exemple_GIT_REPO/simple_example.py"] );
     console.log(process.toString())
-    // process.stdout.on('data', function (data) {
-    //   //res.send(data.toString());
-    //   file_content = data.toString();
-    //   console.log(file_content);
 
     let filename = Math.random() * 100000000000;
     fs.writeFile('../logsGames/' + filename + '.txt', process.toString(), { flag: 'a+' }, err => {
@@ -28,7 +20,6 @@ async function callPython(req, res) {
       }
       //file written successfully
     });
-    // })
 }
 
 function fromDir(startPath,filter){
@@ -66,7 +57,10 @@ app.get('/rules', (req, res) => {
   res.sendFile(get_path("rules.html"));
 });
 
-app.get('/create', callPython);
+app.get('/create', (req, res) => {
+  callPython();
+  res.sendFile(get_path("index.html"));
+});
 
 /**
  * Create all HTML routes
