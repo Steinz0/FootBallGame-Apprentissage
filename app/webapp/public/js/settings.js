@@ -13,7 +13,7 @@ export const FIELDHEIGTH = 700
 export const GOALHEIGTH = 140
 
 // Game settings
-export const NUMBEROFPLAYERS = 11
+export const NUMBEROFPLAYERSBYTEAM = 2
 
 // Player settings
 export const PLAYMAXSPEED = 5

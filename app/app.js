@@ -6,7 +6,40 @@ var path      = require("path");
 var cors      = require('cors');
 const Datastore = require('nedb');
 const DB = require("./db.js");
+let file_content = ''
 
+function callName(req, res) {
+      
+    // Use child_process.spawn method from 
+    // child_process module and assign it
+    // to variable spawn
+    var spawn = require("child_process").spawn;
+      
+    // Parameters passed in spawn -
+    // 1. type_of_script
+    // 2. list containing Path of the script
+    //    and arguments for the script 
+      
+    // E.g : http://localhost:3000/name?firstname=Mike&lastname=Will
+    // so, first name = Mike and last name = Will
+    var process = spawn('python',["../gameEngine/Exemple_GIT_REPO/simple_example.py"] );
+  
+    // Takes stdout data from script which executed
+    // with arguments and send this data to res object
+    process.stdout.on('data', function(data) {
+        res.send(data.toString());
+        file_content = data.toString()
+        console.log(file_content)
+
+        fs.writeFile('../logsGames/test.txt', file_content, err => {
+          if (err) {
+            console.error(err)
+            return
+          }
+          //file written successfully
+        })
+    } )
+}
 
 function fromDir(startPath,filter){
   var files_list = [];
@@ -30,11 +63,19 @@ app.use(cors());
 
 app.use("/dist", express.static(path.join(__dirname, "dist/")));
 app.use("/public",   express.static(path.join(__dirname, "webapp/public/")));
+app.use("/logsGames",   express.static(path.join(__dirname, "../logsGames/")));
+
+app.get('/name', callName);
 
 app.get('/', (req, res) => {
+  res.sendFile(get_path("home.html"));
+});
+app.get('/game', (req, res) => {
   res.sendFile(get_path("index.html"));
 });
-
+app.get('/rules', (req, res) => {
+  res.sendFile(get_path("rules.html"));
+});
 /**
  * Create all HTML routes
  * **/
@@ -49,16 +90,6 @@ files.forEach(file => {
   });
 });
 
-// Connection with the Mongo Database
-// mongoose
-// .connect('mongodb+srv://admin:jG32gSdMFIaGrF97@football.jt6fw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
-// .then(() => {
-//   console.log('DataBase Connected')
-// })
-// .catch(error => {
-//   console.log('DataBase not Connected' + error)
-// })
-
 console.log('Loading MongoDB...');
 const db = new Datastore({filename: './database.db', autoload: true})
 db.loadDatabase(err => {
@@ -67,12 +98,6 @@ db.loadDatabase(err => {
 });
 
 const db2 = new DB.default(db)
-// router.use(express.json());
-// router.use((req, res, next) => {
-//     console.log('API: method %s, path %s', req.method, req.path);
-//     console.log('Body', req.body);
-//     next();
-// });
 
 app.use(express.json())
 app
@@ -97,27 +122,7 @@ app
     catch(e) {
       res.send(e);
     }
-    // const data = db2.insertData(ballCoord, redCoords, blueCoords, score, actualPlayer, order)
-    // .then(() => res.status(201).send(data))
-    // .catch((err) => res.status(500).send(err));
   })
-
-// router.post('/', function(req, res) {
-//     // do something w/ req.body or req.files 
-// });
-// const db2 = new DB.default(db);
-// // Insert the order and all positions in database
-// router.put("/insertData", async (req, res) => {
-//   const data = db2.insertMsg(req.body)
-//   .then(() => res.status(201).send(data))
-//   .catch((err) => res.status(500).send(err));
-// })
-// // Get data to verify if route works
-// router.post("/recupData", async (req, res) => {
-//   const data = db2.recupData()
-//   .then(() => res.status(201).send(data))
-//   .catch((err) => res.status(500).send(err));
-// })
 
 // Start the server
 const PORT = process.env.PORT || 3000;

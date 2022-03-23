@@ -8,10 +8,8 @@ class DB{
         return new Promise((resolve, reject) => {
             this.db.insert({ballCoord, redCoords, blueCoords, score, actualPlayer, order}, function(err, result) {
                 if (err) {
-                    console.log("KO")
                     reject(err);
                 }else{
-                    console.log("OK")
                     resolve(result);
                 }
             });

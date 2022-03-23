@@ -76,8 +76,8 @@ function doneLoading() {
 function createPlayer() {
 
 	// Blue team creation
-	for (let i=0; i<2; i++){
-		// Player creation with formation settings
+	for (let i=0; i<settings.NUMBEROFPLAYERSBYTEAM; i++){
+		// Player creation
 		let player = new Player('Blue', '1', 100 , 100 + (i*10), 'none', 'blue', stadium.loader.resources['blue'].texture)
 
 		allPlayers.push(player)
@@ -88,8 +88,8 @@ function createPlayer() {
 	}
 
 	// Red team creation
-	for (let i=0; i<2; i++){
-		// Player creation with formation settings
+	for (let i=0; i<settings.NUMBEROFPLAYERSBYTEAM; i++){
+		// Player creation
 		let player = new Player('Red', '1', 200 , 200 + (i*10), 'none', 'red', stadium.loader.resources['red'].texture)
 
 		allPlayers.push(player)
@@ -127,7 +127,7 @@ function setSituation() {
 	document.getElementsByClassName("slider").myRange.disabled = false
 	document.getElementsByClassName("breplay")[0].disabled = false
 	let rawFile = new XMLHttpRequest()
-    rawFile.open("GET", 'public/js/file_data.txt', false)
+    rawFile.open("GET", 'logsGames/file_data.txt', false)
     rawFile.onreadystatechange = function ()
     {
         if(rawFile.readyState === 4)

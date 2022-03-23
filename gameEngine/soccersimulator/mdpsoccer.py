@@ -281,16 +281,10 @@ class SoccerState(object):
         if self.ball.position.y > settings.GAME_HEIGHT:
             self.ball.position.y = 2 * settings.GAME_HEIGHT - self.ball.position.y
             self.ball.vitesse.y = -self.ball.vitesse.y
-        print(self.step,'/',self.max_steps)
-        print(self.score)
-        if self.step == 1:
-            writeFile(self.states.items(), self.ball, -1, self.score)
-        elif self.step == self.max_steps:
-            writeFile(self.states.items(), self.ball, 1, self.score)
-        else:
-            writeFile(self.states.items(), self.ball, 0, self.score)
+        # print(self.step,'/',self.max_steps)
+        # print(self.score)
+        writeFile(self.states.items(), self.ball, 0, self.score)
 
-        # writeFile(self.step, self.states.items(), self.ball,['0','0'])
         
     def _do_goal(self, idx):
         self.score[idx]+=1
