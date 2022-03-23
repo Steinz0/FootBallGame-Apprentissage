@@ -4,7 +4,7 @@
 
 To start the web server, you just need to start this commmand : 
 ```
-node app.js
+npm run dev
 ```
 
 ### Membres du binôme
