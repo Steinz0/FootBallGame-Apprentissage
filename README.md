@@ -2,7 +2,7 @@
 
 ### Start the server
 
-To start the web server, you just need to start this commmand : 
+To start the web server, you just need to start this commmand on the app folder: 
 ```
 npm run dev
 ```
