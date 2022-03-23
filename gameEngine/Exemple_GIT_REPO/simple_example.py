@@ -21,7 +21,7 @@ thon2.add("PyPlayer",RandomStrategy()) #Strategie qui ne fait rien
 
 
 #Creation d'une partie
-simu = Simulation(thon2,thon, max_steps=10)
+simu = Simulation(thon2,thon)
 #Jouer et afficher la partie
 simu.start()
 

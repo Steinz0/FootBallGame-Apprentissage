@@ -5,40 +5,30 @@ const express = require('express');
 var path      = require("path");
 var cors      = require('cors');
 const Datastore = require('nedb');
+const spawn = require('await-spawn')
 const DB = require("./db.js");
 let file_content = ''
 
-function callName(req, res) {
+async function callPython(req, res) {
       
-    // Use child_process.spawn method from 
-    // child_process module and assign it
-    // to variable spawn
-    var spawn = require("child_process").spawn;
+    //let spawn = require("child_process").spawn;
       
-    // Parameters passed in spawn -
-    // 1. type_of_script
-    // 2. list containing Path of the script
-    //    and arguments for the script 
-      
-    // E.g : http://localhost:3000/name?firstname=Mike&lastname=Will
-    // so, first name = Mike and last name = Will
-    var process = spawn('python',["../gameEngine/Exemple_GIT_REPO/simple_example.py"] );
-  
-    // Takes stdout data from script which executed
-    // with arguments and send this data to res object
-    process.stdout.on('data', function(data) {
-        res.send(data.toString());
-        file_content = data.toString()
-        console.log(file_content)
+    let process = await spawn('python',["../gameEngine/Exemple_GIT_REPO/simple_example.py"] );
+    console.log(process.toString())
+    // process.stdout.on('data', function (data) {
+    //   //res.send(data.toString());
+    //   file_content = data.toString();
+    //   console.log(file_content);
 
-        fs.writeFile('../logsGames/test.txt', file_content, err => {
-          if (err) {
-            console.error(err)
-            return
-          }
-          //file written successfully
-        })
-    } )
+    let filename = Math.random() * 100000000000;
+    fs.writeFile('../logsGames/' + filename + '.txt', process.toString(), { flag: 'a+' }, err => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      //file written successfully
+    });
+    // })
 }
 
 function fromDir(startPath,filter){
@@ -65,7 +55,6 @@ app.use("/dist", express.static(path.join(__dirname, "dist/")));
 app.use("/public",   express.static(path.join(__dirname, "webapp/public/")));
 app.use("/logsGames",   express.static(path.join(__dirname, "../logsGames/")));
 
-app.get('/name', callName);
 
 app.get('/', (req, res) => {
   res.sendFile(get_path("home.html"));
@@ -76,6 +65,9 @@ app.get('/game', (req, res) => {
 app.get('/rules', (req, res) => {
   res.sendFile(get_path("rules.html"));
 });
+
+app.get('/create', callPython);
+
 /**
  * Create all HTML routes
  * **/
