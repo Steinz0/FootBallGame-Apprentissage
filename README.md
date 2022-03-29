@@ -16,7 +16,7 @@ To check if rabbitmq started well (status : running)
 ```
 sudo systemctl status rabbitmq-server
 ```
-With erlang you can go on localhost:15672 to open the RabbitMq Management
+With **erlang** you can go on localhost:15672 to open the RabbitMq Management
 
 ## Datasets structures
 
