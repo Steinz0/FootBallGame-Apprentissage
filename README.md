@@ -1,11 +1,23 @@
 # FootballGame-ML
 
-## Start the server
+## Start
 
 To start the web server, you just need to start this commmand on the app folder: 
 ```
 npm run dev
 ```
+
+Also you need to start RabbitMQ for Celery:
+```
+sudo systemctl enable rabbitmq-server
+sudo systemctl start rabbitmq-server
+```
+To check if rabbitmq started well (status : running)
+```
+sudo systemctl status rabbitmq-server
+```
+With erlang you can go on localhost:15672 to open the RabbitMq Management
+
 ## Datasets structures
 
 2 Datasets:
