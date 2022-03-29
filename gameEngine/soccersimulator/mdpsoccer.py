@@ -250,7 +250,7 @@ class SoccerState(object):
     def copy(self):
         return deepcopy(self)
 
-    def apply_actions(self, actions=None,strategies=None):
+    def apply_actions(self, actions=None,strategies=None, filename=None):
         if strategies: 
             self.strategies.update(strategies)
 
@@ -281,9 +281,9 @@ class SoccerState(object):
         if self.ball.position.y > settings.GAME_HEIGHT:
             self.ball.position.y = 2 * settings.GAME_HEIGHT - self.ball.position.y
             self.ball.vitesse.y = -self.ball.vitesse.y
-        # print(self.step,'/',self.max_steps)
-        # print(self.score)
-        writeFile(self.states.items(), self.ball, 0, self.score)
+        print(self.step,'/',self.max_steps)
+        print(self.score)
+        writeFile(filename, self.states.items(), self.ball, 0, self.score)
 
         
     def _do_goal(self, idx):
@@ -434,7 +434,9 @@ listPos = []
 
 
 class Simulation(object):
-    def __init__(self,team1=None,team2=None, max_steps = settings.MAX_GAME_STEPS,initial_state=None,**kwargs):
+    def __init__(self,team1=None,team2=None, max_steps = settings.MAX_GAME_STEPS,initial_state=None,filename=None,**kwargs):
+        self.filename = filename
+        print(self.filename)
         self.team1, self.team2 = team1 or SoccerTeam(),team2 or SoccerTeam()
         self.initial_state = initial_state or  SoccerState.create_initial_state(self.team1.nb_players,self.team2.nb_players,max_steps)
         self.state = self.initial_state.copy()
@@ -523,7 +525,7 @@ class Simulation(object):
                     logger.warning("Error for team %d -- loose match" % ((i+1),))
                     self.states.append(self.state.copy())
                     return
-            self.state.apply_actions(actions,strategies)
+            self.state.apply_actions(actions,strategies, self.filename)
             self.states.append(self.state.copy())
         self.update_round()
     def get_team(self,idx):

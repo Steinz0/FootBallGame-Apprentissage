@@ -9,15 +9,21 @@ const spawn = require('await-spawn');
 const DB = require("./db.js");
 const celery = require('celery-node');
 
-const client = celery.createClient(
-  "amqp://",
-  "amqp://",
-  "match_tasks"
-);
 
 function Producer(req, res) {
-  const task = client.createTask("Exemple_GIT_REPO.simple_example.print_hello");
-  const result = task.applyAsync();
+
+
+  let client = celery.createClient(
+    "amqp://localhost:5672",
+    "amqp://localhost:5672",
+    "celery"
+  );
+
+  console.log('In producer')
+  let task = client.createTask("simple_example.create_match");
+  console.log(task)
+  let result = task.applyAsync();
+  console.log(result)
   result.get().then(data => {
     console.log("Result producer : " + data);
     client.disconnect();
@@ -75,7 +81,7 @@ app.get('/rules', (req, res) => {
 
 app.get('/create', (req, res) => {
   Producer();
-  res.sendFile(get_path("index.html"));
+  //res.sendFile(get_path("index.html"));
 });
 
 /**

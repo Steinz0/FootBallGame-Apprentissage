@@ -10,28 +10,28 @@ import zlib
 import base64
 import random
 valid_chars = frozenset("%s%s%s" % (string.ascii_letters, string.digits, "_"))
-filename = str(random.random())
 
-def writeFile(players, ball, start_end, score):
-    # with open('../../logsGames/'+filename+'.txt', 'a+') as f:
-    #     # if start_end == -1:
-    #     #     f.truncate(0)
-    #     # f.seek(0, os.SEEK_SET)
-    #     # if start_end == 1:
-    #     #     f.write('1')
-    #     # else:
-    #     #     f.write('0')
-    #     # f.seek(0, os.SEEK_END)
-    #     val = str(score[1]) + ' ' + str(score[2]) + ' ' + str(ball.position.x) + ' ' + str(settings.GAME_HEIGHT - ball.position.y) + ' ' + str(ball.vitesse.x) + ' ' + str(settings.GAME_HEIGHT - ball.vitesse.y)
-    #     for _,c in players:
-    #         val += ' ' + str(c.position.x) + ' ' + str(settings.GAME_HEIGHT - c.position.y) + ' ' + str(c.vitesse.x) + ' ' + str(-c.vitesse.y)
-    #     f.write(val+'\n')
+
+def writeFile(filename, players, ball, start_end, score):
+    with open('../../logsGames/'+filename+'.txt', 'a+') as f:
+        # if start_end == -1:
+        #     f.truncate(0)
+        # f.seek(0, os.SEEK_SET)
+        # if start_end == 1:
+        #     f.write('1')
+        # else:
+        #     f.write('0')
+        # f.seek(0, os.SEEK_END)
+        val = str(score[1]) + ' ' + str(score[2]) + ' ' + str(ball.position.x) + ' ' + str(settings.GAME_HEIGHT - ball.position.y) + ' ' + str(ball.vitesse.x) + ' ' + str(settings.GAME_HEIGHT - ball.vitesse.y)
+        for _,c in players:
+            val += ' ' + str(c.position.x) + ' ' + str(settings.GAME_HEIGHT - c.position.y) + ' ' + str(c.vitesse.x) + ' ' + str(-c.vitesse.y)
+        f.write(val+'\n')
 
     #poor version but works ... 
-    val = str(score[1]) + ' ' + str(score[2]) + ' ' + str(ball.position.x) + ' ' + str(settings.GAME_HEIGHT - ball.position.y) + ' ' + str(ball.vitesse.x) + ' ' + str(settings.GAME_HEIGHT - ball.vitesse.y)
-    for _,c in players:
-        val += ' ' + str(c.position.x) + ' ' + str(settings.GAME_HEIGHT - c.position.y) + ' ' + str(c.vitesse.x) + ' ' + str(-c.vitesse.y)
-    print(val)
+    # val = str(score[1]) + ' ' + str(score[2]) + ' ' + str(ball.position.x) + ' ' + str(settings.GAME_HEIGHT - ball.position.y) + ' ' + str(ball.vitesse.x) + ' ' + str(settings.GAME_HEIGHT - ball.vitesse.y)
+    # for _,c in players:
+    #     val += ' ' + str(c.position.x) + ' ' + str(settings.GAME_HEIGHT - c.position.y) + ' ' + str(c.vitesse.x) + ' ' + str(-c.vitesse.y)
+    # print(val)
     
 # def writeFileBefore(players, ball):
 #     with open('../../file_data.txt', 'r+') as f:
