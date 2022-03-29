@@ -1,18 +1,18 @@
 # Football-Apprentissage
 
-### Start the server
+## Start the server
 
 To start the web server, you just need to start this commmand on the app folder: 
 ```
 npm run dev
 ```
-### Datasets structures
+## Datasets structures
 
 2 Datasets:
  - Users
  - Orders
 
-#### Users
+### Users
 
 MongoDB again, this dataset registre all logs games for all user.
 
@@ -20,7 +20,7 @@ For each element:
  - userId
  - logs : lists of all log ids
 
-#### Logs Games
+### Logs Games
 
 MongoDB again, this dataset registre all order for all user.
 
