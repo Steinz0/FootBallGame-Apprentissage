@@ -10,23 +10,28 @@ npm run dev
 
 2 Datasets:
  - Users
- - Logs Games
+ - Orders
 
 #### Users
 
-It's a MongoDb dataset, which you have the userid and a list of all logs ids for the the userid
+MongoDB again, this dataset registre all logs games for all user.
+
+For each element:
+ - userId
+ - logs : lists of all log ids
 
 #### Logs Games
 
-The file represents the positions of the players and the ball in the current match.
+MongoDB again, this dataset registre all order for all user.
 
-How to read one line :
-- 1st value : Red Team Score
-- 2nd value : Blue Team Score
-- 3rd value : Position x to the ball
-- 4th value : Position y to the ball
-- [Nb of red players] : Position x  Position y
-- [Nb of blue players] : Position x  Position y
+For each element:
+- userId 
+- ballCoord
+- redCoords : Position x  Position y for all red players
+- blueCoords : Position x  Position y for all red players
+- score
+- ActualPlayer : The position of the player you the order is destinate
+- order
 
 ### Membres du binôme
   - KRISNI Almehdi
