@@ -5,8 +5,24 @@ const express = require('express');
 var path      = require("path");
 var cors      = require('cors');
 const Datastore = require('nedb');
-const spawn = require('await-spawn')
+const spawn = require('await-spawn');
 const DB = require("./db.js");
+const celery = require('celery-node');
+
+const client = celery.createClient(
+  "amqp://",
+  "amqp://",
+  "match_tasks"
+);
+
+function Producer(req, res) {
+  const task = client.createTask("Exemple_GIT_REPO.simple_example.print_hello");
+  const result = task.applyAsync();
+  result.get().then(data => {
+    console.log("Result producer : " + data);
+    client.disconnect();
+  })
+}
 
 async function callPython(req, res) {
     let process = await spawn('python',["../gameEngine/Exemple_GIT_REPO/simple_example.py"] );
@@ -58,7 +74,7 @@ app.get('/rules', (req, res) => {
 });
 
 app.get('/create', (req, res) => {
-  callPython();
+  Producer();
   res.sendFile(get_path("index.html"));
 });
 
