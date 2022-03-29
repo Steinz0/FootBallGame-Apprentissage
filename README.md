@@ -18,6 +18,11 @@ sudo systemctl status rabbitmq-server
 ```
 With **erlang** you can go on localhost:15672 to open the RabbitMq Management
 
+Now you can run Celery server:
+```
+celery -A <File-Contain-Celery-App> worker -l info
+```
+
 ## Datasets structures
 
 2 Datasets:
