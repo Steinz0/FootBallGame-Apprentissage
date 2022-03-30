@@ -250,7 +250,7 @@ class SoccerState(object):
     def copy(self):
         return deepcopy(self)
 
-    def apply_actions(self, actions=None,strategies=None, filename=None):
+    def apply_actions(self, actions=None,strategies=None, filename=None, verbose=False):
         if strategies: 
             self.strategies.update(strategies)
 
@@ -281,8 +281,9 @@ class SoccerState(object):
         if self.ball.position.y > settings.GAME_HEIGHT:
             self.ball.position.y = 2 * settings.GAME_HEIGHT - self.ball.position.y
             self.ball.vitesse.y = -self.ball.vitesse.y
-        print(self.step,'/',self.max_steps)
-        print(self.score)
+        if verbose:
+            print(self.step,'/',self.max_steps)
+            print(self.score)
         writeFile(filename, self.states.items(), self.ball, 0, self.score)
 
         

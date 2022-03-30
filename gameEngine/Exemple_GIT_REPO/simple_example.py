@@ -29,12 +29,10 @@ def create_match(max_steps=500):
     thon2.add("PyPlayer",RandomStrategy()) #Strategie qui ne fait rien
     thon2.add("PyPlayer",RandomStrategy()) #Strategie qui ne fait rien
 
-    filename = str(random.random())
+    filename = str(random.random()*100000000)
     #Creation d'une partie
     simu = Simulation(thon2,thon,max_steps=max_steps,filename=filename)
     #Jouer et afficher la partie
     simu.start()
 
-    return 'Match log in '+ filename + '.txt'
-
-
+    return filename

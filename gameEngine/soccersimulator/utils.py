@@ -33,62 +33,6 @@ def writeFile(filename, players, ball, start_end, score):
     #     val += ' ' + str(c.position.x) + ' ' + str(settings.GAME_HEIGHT - c.position.y) + ' ' + str(c.vitesse.x) + ' ' + str(-c.vitesse.y)
     # print(val)
     
-# def writeFileBefore(players, ball):
-#     with open('../../file_data.txt', 'r+') as f:
-#         lines = [line.rstrip('\n') for line in f][0]
-#         checker = lines[0]
-
-#         if checker == '0':
-#             f.seek(0, os.SEEK_SET)
-#             f.write('1')
-#             val = '\n' + str(ball.position.x) + ' ' + str(settings.GAME_HEIGHT - ball.position.y) + ' ' + str(ball.vitesse.x) + ' ' + str(settings.GAME_HEIGHT - ball.vitesse.y)
-#             #val = '\n' + str(ball.x) + ' ' + str(settings.GAME_HEIGHT - ball.y)
-#             f.write(val)
-#             for _,c in players:
-#                 val = '\n' + str(c.position.x) + ' ' + str(settings.GAME_HEIGHT - c.position.y) + ' ' + str(c.vitesse.x) + ' ' + str(-c.vitesse.y)
-#                 f.write(val)
-#             # f.write("\n %d %d %d %d", np.random.randint(width), np.random.randint(height), 0 ,0)
-#             # f.write("\n %d %d %d %d", np.random.randint(width), np.random.randint(height), 0 ,0)
-#             #f.seek(0, os.SEEK_SET)
-#         else:
-#             sleep(1/60)
-#             f.seek(0, os.SEEK_SET)
-#             f.write('0')
-# def writeFile(it, players, ball, score) :
-#     with open('../../file_data.txt', 'a') as f :
-#         # If it's the first game iteration, we clean the file first
-#         if (it == 0) :
-#             # Cleaning the file
-#             f.truncate(0)
-
-#             # Writing the iteration number
-#             f.write(str(it))
-
-#             # Writing the ball's position
-#             f.write(" " + str(ball.position.x) + " " + str(ball.position.y))
-
-#             # Writing the players' positions
-#             for _,p in players :
-#                 f.write(" " + str(p.position.x) + " " + str(p.position.y))
-
-#             # Writing the score
-#             f.write(" " + str(score[0] + " " + score[1] + "\n"))
-
-#         # If not, we continue writing the game state in the file
-#         else :
-#             # Writing the iteration number
-#             f.write(str(it))
-
-#             # Writing the ball's position
-#             f.write(" " + str(ball.position.x) + " " + str(ball.position.y))
-
-#             # Writing the players' positions
-#             for _,p in players :
-#                 f.write(" " + str(p.position.x) + " " + str(p.position.y))
-
-#             # Writing the score
-#             f.write(" " + str(score[0] + " " + score[1] + "\n"))
-            
 def fmt(x):
     if type(x)==float:
         return round(x,settings.PREC)
