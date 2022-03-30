@@ -1,16 +1,16 @@
 'use strict';
 
-require('dotenv').config()
 
 var fs        = require('fs');
 const express = require('express');
 var path      = require("path");
 var cors      = require('cors');
+
+const celery = require('celery-node');
+
 const Datastore = require('nedb');
-//const spawn = require('await-spawn');
 const orderDB = require("./db.js");
 const UserDB = require("./dataUser.js");
-const celery = require('celery-node');
 
 const bcrypt = require('bcrypt')
 const passport = require('passport')
@@ -53,12 +53,6 @@ db2.loadDatabase(err => {
 
 const usersDB = new UserDB.default(db2)
 
-// initializePassport(
-//   passport,
-//   email => users.find(user => user.email == email),
-//   id => users.find(user => user.id === id)
-// )
-
 initializePassport(
   passport,
   email => usersDB.getUserByEmail(email),
@@ -69,10 +63,11 @@ app.set('view-engine', 'ejs')
 app.use(express.urlencoded({ extended: false }))
 app.use(flash())
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret: "secretwsrhworhpwq",
   resave: false,
   saveUninitialized: false
 }))
+
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))
