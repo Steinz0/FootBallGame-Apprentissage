@@ -1,12 +1,14 @@
 'use strict';
 
+require('dotenv').config()
+
 var fs        = require('fs');
 const express = require('express');
 var path      = require("path");
 var cors      = require('cors');
 const Datastore = require('nedb');
 //const spawn = require('await-spawn');
-const DB = require("./db.js");
+const orderDB = require("./db.js");
 const UserDB = require("./dataUser.js");
 const celery = require('celery-node');
 
@@ -17,8 +19,6 @@ const session = require('express-session')
 const methodOverride = require('method-override')
 
 const initializePassport = require('./passport-config')
-
-
 
 const app = express();
 app.use(cors());
@@ -44,8 +44,6 @@ function get_path(file){
   return path.join(path.join(__dirname, "webapp/"), file);
 }
 
-const users = []
-
 console.log('Loading MongoDB Users ...');
 const db2 = new Datastore({filename: './users.db', autoload: true})
 db2.loadDatabase(err => {
@@ -55,24 +53,23 @@ db2.loadDatabase(err => {
 
 const usersDB = new UserDB.default(db2)
 
-initializePassport(
-  passport,
-  email => users.find(user => user.email == email),
-  id => users.find(user => user.id === id)
-)
-
 // initializePassport(
 //   passport,
-//   email => usersDB.getUserByEmail(email),
-//   id => usersDB.getUserByid(id)
+//   email => users.find(user => user.email == email),
+//   id => users.find(user => user.id === id)
 // )
 
+initializePassport(
+  passport,
+  email => usersDB.getUserByEmail(email),
+  id => usersDB.getUserByid(id)
+)
 
 app.set('view-engine', 'ejs')
 app.use(express.urlencoded({ extended: false }))
 app.use(flash())
 app.use(session({
-  secret: 'secret',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false
 }))
@@ -99,12 +96,6 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
 
     usersDB.createUser(req.body.name, req.body.email, hashedPassword)
-    users.push({
-      id: Date.now().toString(),
-      name: req.body.name,
-      email: req.body.email,
-      password: hashedPassword
-    })
     res.redirect('/login')
   } catch {
     res.redirect('/register')
@@ -185,7 +176,7 @@ db1.loadDatabase(err => {
 });
 
 
-const ordersDB = new DB.default(db1)
+const ordersDB = new orderDB.default(db1)
 
 app.use(express.json())
 
@@ -207,7 +198,7 @@ app
       if (!data){
           res.status(404).send({"status": "error", "msg": "Error to put data retry"});
       }else
-          res.status(201).send({"msg": "Data insert in DB"})
+          res.status(201).send({"msg": "Data insert in orderDB"})
     }
     catch(e) {
       res.send(e);
