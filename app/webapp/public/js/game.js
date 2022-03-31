@@ -79,6 +79,7 @@ function doneLoading() {
 	stadium.stage.addChild(ball)
 
 	stadium.ticker.add(gameLoop)
+	getDataMatches()
 }
 
 function createPlayer() {
@@ -206,13 +207,13 @@ function setValues(coords) {
 	}
 }
 
-const arrayToOption = (arr, selectId) =>
-        (e1 => (
-          (e1 = document.querySelector('#' + selectId)),
-		  (e1.innerHTML = '')
-          (e1.innerHTML += arr.map(item => `<option> ${item} </option>`).join(''))
-        ))();
-
+function arrayToOption(arr, selectId) {
+	(e1 => (
+		(e1 = document.querySelector('#' + selectId)),
+		(e1.innerHTML = '')
+		(e1.innerHTML += arr.map(item => `<option> ${item} </option>`).join(''))
+	))();
+}
 async function getDataMatches(){
     await axios.get('http://localhost:3000/db')
     .then((data) => {
