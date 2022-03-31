@@ -18,7 +18,9 @@ const flash = require('express-flash')
 const session = require('express-session')
 const methodOverride = require('method-override')
 
-const initializePassport = require('./passport-config')
+const initializePassport = require('./passport-config');
+const { rejects } = require('assert');
+const { resolve } = require('path');
 
 const app = express();
 app.use(cors());
@@ -58,7 +60,10 @@ initializePassport(
   email => usersDB.getUserByEmail(email),
   id => usersDB.getUserByid(id)
 )
-
+// async function TestaddMatches() {
+//   await usersDB.addMatch("a@a", 'we')
+// }
+// TestaddMatches()
 app.set('view-engine', 'ejs')
 app.use(express.urlencoded({ extended: false }))
 app.use(flash())
@@ -89,7 +94,6 @@ app.get('/register', checkNotAuthenticated, (req, res) => {
 app.post('/register', checkNotAuthenticated, async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
-
     usersDB.createUser(req.body.name, req.body.email, hashedPassword)
     res.redirect('/login')
   } catch {
