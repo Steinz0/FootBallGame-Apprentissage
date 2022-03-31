@@ -7,6 +7,8 @@ let blueTeam = []
 let redTeam = []
 let score = [0,0]
 let play = false
+let filename = 'file_data'
+
 const Application = PIXI.Application;
 
 const stadium = new Application({
@@ -60,6 +62,12 @@ btn.addEventListener("click", onOffPlay);
 
 const submit = document.getElementsByClassName("submit-button")[0]; 
 submit.addEventListener("click", insertData);
+
+const testB = document.getElementsByClassName("test")[0]; 
+testB.addEventListener("click", getDataMatches);
+
+const fileB = document.getElementsByClassName("file-button")[0]; 
+fileB.addEventListener("click", setFilename);
 
 function show(e) {
 	console.log(e.progress)
@@ -122,12 +130,16 @@ function drawLine(obj, x, y, vectx, vecty) {
     obj.lineTo(x + (vectx * 10), y + (vecty * 10));
 }
 
+
+function setFilename(file) {
+	filename = document.querySelector('#file').value
+}
 function setSituation() {
 	let x = document.getElementsByClassName("slider").myRange.value
 	document.getElementsByClassName("slider").myRange.disabled = false
 	document.getElementsByClassName("breplay")[0].disabled = false
 	let rawFile = new XMLHttpRequest()
-    rawFile.open("GET", 'logsGames/file_data.txt', false)
+    rawFile.open("GET", `logsGames/${filename}.txt`, false)
     rawFile.onreadystatechange = function ()
     {
         if(rawFile.readyState === 4)
@@ -135,7 +147,7 @@ function setSituation() {
             if(rawFile.status === 200 || rawFile.status == 0)
             {
                 let allText = rawFile.responseText.split("\n")			
-				let checker = allText[0].split("\r")[0]
+				// let checker = allText[0].split("\r")[0]
 				let coords = allText.slice(1, allText.length)
 				setValues(coords[x])
             }
@@ -194,17 +206,26 @@ function setValues(coords) {
 	}
 }
 
-async function getData(){
+const arrayToOption = (arr, selectId) =>
+        (e1 => (
+          (e1 = document.querySelector('#' + selectId)),
+		  (e1.innerHTML = '')
+          (e1.innerHTML += arr.map(item => `<option> ${item} </option>`).join(''))
+        ))();
+
+async function getDataMatches(){
     await axios.get('http://localhost:3000/db')
     .then((data) => {
-      console.log(data)
+		arrayToOption(data.data.msg, 'file')
     })
     .catch((err) => {
-      console.log(err)
+      	console.log(err)
     })
+
+
 }
 
-async function insertData(){
+async function insertData(userId){
 	const ballCoord = [ball.position.x, ball.position.y]
 	const redCoords = []
 	const blueCoords = []
@@ -216,6 +237,7 @@ async function insertData(){
 	const order = document.querySelector('#choose').value;
 
 	const data = {
+		userId: userId,
         ballCoord: ballCoord,
         redCoords: redCoords,
         blueCoords: redCoords,

@@ -17,17 +17,17 @@ class UserDB{
         })
     }
 
-    async addMatch(email, idMatch) {
-        const user = await this.getUserByEmail(email)
+    async addMatch(id, idMatch) {
+        const user = await this.getUserByid(id)
         let listMatches = user[0].idMatches
         listMatches.push(idMatch)
         return new Promise((resolve, reject) => {
-            this.db.update({ email: email}, { $set: {idMatches: listMatches}}, function (err, numReplaced) {
-            if (err){
-                reject(err)
-            } else {
-                resolve(numReplaced)
-            }
+            this.db.update({ _id: id}, { $set: {idMatches: listMatches}}, function (err, result) {
+                if (err){
+                    reject(err)
+                } else {
+                    resolve(result)
+                }
             })
         })
     }

@@ -134,6 +134,8 @@ function Producer(req, res) {
   console.log(result)
   result.get().then(data => {
     console.log("Result producer : " + data);
+    //console.log(req.session.passport.user)
+    usersDB.addMatch(req.session.passport.user, data)
     client.disconnect();
   })
 }
@@ -182,18 +184,24 @@ app.use(express.json())
 
 app
   .route("/db")
-  .get((req, res) => {
-    const data = ordersDB.recupData()
-    .then((data) => {
-      console.log(data)
-    })
-    .catch((err) => res.status(500).send(err));
+  .get(async (req, res) => {
+    try {
+      const data = await usersDB.getUserByid(req.session.passport.user);
+      if (!data){
+        res.status(404).send({"status": "error", "msg": "Error to get data retry"});
+      }else{
+        res.status(200).send({"msg": data[0].idMatches})
+      }
+    }
+    catch(e) {
+      res.send(e);
+    }
   })
   .post( async (req,res) => {
     console.log(req.body)
     const {ballCoord, redCoords, blueCoords, score, actualPlayer, order} = req.body
     try {
-    const data = ordersDB.insertData(ballCoord, redCoords, blueCoords, score, actualPlayer, order)
+    const data = ordersDB.insertData(req.session.passport.user, ballCoord, redCoords, blueCoords, score, actualPlayer, order)
       if (!data){
           res.status(404).send({"status": "error", "msg": "Error to put data retry"});
       }else
