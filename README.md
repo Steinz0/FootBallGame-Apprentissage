@@ -31,7 +31,7 @@ celery -A <File-Contain-Celery-App> worker -l info
 
 ### Users
 
-MongoDB again, this dataset records all party IDs for each of the users.
+This dataset (MongoDB) records all party IDs for each of the users.
 
 For each element:
  - name
@@ -42,7 +42,7 @@ For each element:
   
 ### Orders
 
-MongoDB again, this dataset registre all order for all user.
+This dataset (MongoDB) registre all order for all user.
 
 For each element:
 - userID 
