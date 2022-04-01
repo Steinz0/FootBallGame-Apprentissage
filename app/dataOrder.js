@@ -1,4 +1,4 @@
-class DB{
+class OrderDB{
     constructor(db) {
         this.db = db
         this.db.loadDatabase();
@@ -29,4 +29,4 @@ class DB{
 }
 
 
-exports.default = DB;
+exports.default = OrderDB;

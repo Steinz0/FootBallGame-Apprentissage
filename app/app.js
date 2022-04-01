@@ -1,29 +1,26 @@
 'use strict';
 
+var fs                   = require('fs');
+var path                 = require("path");
+var cors                 = require('cors');
 
-var fs        = require('fs');
-const express = require('express');
-var path      = require("path");
-var cors      = require('cors');
+const express            = require('express');
 
-const celery = require('celery-node');
+const celery             = require('celery-node');
+const Datastore          = require('nedb');
+const orderDB            = require("./dataOrder.js");
+const UserDB             = require("./dataUser.js");
 
-const Datastore = require('nedb');
-const orderDB = require("./db.js");
-const UserDB = require("./dataUser.js");
-
-const bcrypt = require('bcrypt')
-const passport = require('passport')
-const flash = require('express-flash')
-const session = require('express-session')
-const methodOverride = require('method-override')
-
+const bcrypt             = require('bcrypt');
+const passport           = require('passport');
+const flash              = require('express-flash');
+const session            = require('express-session');
+const methodOverride     = require('method-override');
 const initializePassport = require('./passport-config');
-const { rejects } = require('assert');
-const { resolve } = require('path');
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 
 app.use("/dist", express.static(path.join(__dirname, "dist/")));
 app.use("/public",   express.static(path.join(__dirname, "webapp/public/")));
@@ -46,24 +43,50 @@ function get_path(file){
   return path.join(path.join(__dirname, "webapp/"), file);
 }
 
+// Load Databases
+
 console.log('Loading MongoDB Users ...');
 const db2 = new Datastore({filename: './users.db', autoload: true})
 db2.loadDatabase(err => {
-    if (err) console.log('Error Database Users:', err); 
-    else console.log('MongoDB Users OK!');
+  if (err) console.log('Error Database Users:', err); 
+  else console.log('MongoDB Users OK!');
 });
 
 const usersDB = new UserDB.default(db2)
+
+console.log('Loading MongoDB Orders ...');
+const db1 = new Datastore({filename: './database.db', autoload: true})
+db1.loadDatabase(err => {
+    if (err) console.log('Error Database Orders:', err); 
+    else console.log('MongoDB Orders OK!');
+});
+
+
+const ordersDB = new orderDB.default(db1)
+
+// Authentication
 
 initializePassport(
   passport,
   email => usersDB.getUserByEmail(email),
   id => usersDB.getUserByid(id)
 )
-// async function TestaddMatches() {
-//   await usersDB.addMatch("a@a", 'we')
-// }
-// TestaddMatches()
+  
+function checkAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next()
+  }
+
+  res.redirect('/login')
+}
+
+function checkNotAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return res.redirect('/')
+  }
+  next()
+}
+
 app.set('view-engine', 'ejs')
 app.use(express.urlencoded({ extended: false }))
 app.use(flash())
@@ -76,6 +99,8 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))
+
+//Authentication routes
 
 app.get('/login', checkNotAuthenticated, (req, res) => {
   res.render('login.ejs')
@@ -106,20 +131,8 @@ app.delete('/logout', (req, res) => {
   res.redirect('/login')
 })
 
-function checkAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next()
-  }
 
-  res.redirect('/login')
-}
-
-function checkNotAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return res.redirect('/')
-  }
-  next()
-}
+// RabbiMQ & Celery (for the creation of a new game) 
 
 function Producer(req, res) {
   let client = celery.createClient(
@@ -129,16 +142,15 @@ function Producer(req, res) {
   );
 
   let task = client.createTask("simple_example.create_match");
-  console.log(task)
   let result = task.applyAsync();
-  console.log(result)
+
   result.get().then(data => {
-    console.log("Result producer : " + data);
-    //console.log(req.session.passport.user)
     usersDB.addMatch(req.session.passport.user, data)
     client.disconnect();
   })
 }
+
+// Other routes  
 
 app.get('/', (req, res) => {
   res.sendFile(get_path("home.html"));
@@ -155,9 +167,7 @@ app.get('/create', checkAuthenticated, (req, res) => {
   res.sendFile(get_path("index.html"));
 });
 
-/**
- * Create all HTML routes
- * **/
+// Create all HTML routes
 const files = fromDir(path.join(__dirname, "webapp/"),'.html');
 files.forEach(file => {
   let route = file.split("/");
@@ -169,18 +179,8 @@ files.forEach(file => {
   });
 });
 
-console.log('Loading MongoDB Orders ...');
-const db1 = new Datastore({filename: './database.db', autoload: true})
-db1.loadDatabase(err => {
-    if (err) console.log('Error Database Orders:', err); 
-    else console.log('MongoDB Orders OK!');
-});
 
-
-const ordersDB = new orderDB.default(db1)
-
-app.use(express.json())
-
+// Routes for databases
 
 app
   .route("/db")
@@ -237,6 +237,7 @@ app
   
 
 // Start the server
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`App listening on http://localhost:${PORT}`);
