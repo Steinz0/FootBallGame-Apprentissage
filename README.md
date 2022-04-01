@@ -31,24 +31,28 @@ celery -A <File-Contain-Celery-App> worker -l info
 
 ### Users
 
-MongoDB again, this dataset registre all logs games for all user.
+This dataset (MongoDB) records all party IDs for each of the users.
 
 For each element:
- - userId
- - logs : lists of all log ids
+ - name
+ - email
+ - password
+ - iDlogs : lists of all party IDs
+ - id : Generate by MongoDB
+  
+### Orders
 
-### Logs Games
-
-MongoDB again, this dataset registre all order for all user.
+This dataset (MongoDB) registre all order for all user.
 
 For each element:
-- userId 
+- userID 
 - ballCoord
 - redCoords : Position x  Position y for all red players
 - blueCoords : Position x  Position y for all red players
 - score
-- ActualPlayer : The position of the player you the order is destinate
+- ActualPlayer : The position of the player who the order is destinate
 - order
+- id : Generate by MongoDB
 
 ### Membres du binôme
   - KRISNI Almehdi
