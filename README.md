@@ -37,7 +37,7 @@ For each element:
  - name
  - email
  - password
- - iDlogs : lists of all party ids
+ - iDlogs : lists of all party IDs
  - id : Generate by MongoDB
   
 ### Orders
@@ -45,7 +45,7 @@ For each element:
 MongoDB again, this dataset registre all order for all user.
 
 For each element:
-- userId 
+- userID 
 - ballCoord
 - redCoords : Position x  Position y for all red players
 - blueCoords : Position x  Position y for all red players
