@@ -59,6 +59,8 @@ stadium.loader.load();
 const btn = document.getElementsByClassName("breplay")[0]; 
 btn.addEventListener("click", onOffPlay);
 
+const deleteB = document.getElementsByClassName("delete-button")[0]; 
+deleteB.addEventListener("click", deleteGame);
 
 const submit = document.getElementsByClassName("submit-button")[0]; 
 submit.addEventListener("click", insertData);
@@ -132,8 +134,9 @@ function drawLine(obj, x, y, vectx, vecty) {
 }
 
 
-function setFilename(file) {
-	filename = document.querySelector('#file').value
+function setFilename() {
+	console.log(document.querySelector('#fname').innerHTML)
+	filename = document.querySelector('#fname').innerHTML
 }
 function setSituation() {
 	let x = document.getElementsByClassName("slider").myRange.value
@@ -172,6 +175,9 @@ function onOffPlay() {
 	}
 }
 function playGameFile() {
+	if (parseInt(document.getElementsByClassName("slider").myRange.value) >= 2000){
+		document.getElementsByClassName("slider").myRange.value = 0
+	}
 	document.getElementsByClassName("slider").myRange.value = parseInt(document.getElementsByClassName("slider").myRange.value) + 1
 	setSituation()
 }
@@ -180,7 +186,7 @@ function setValues(coords) {
 	if (coords != undefined){
 		let c = coords.split(" ")
 		
-		score = c
+		score = [c[1], c[0]]
 		document.getElementById("blueTeamScore").innerHTML = c[1]
 		document.getElementById("redTeamScore").innerHTML = c[0]
 
@@ -207,23 +213,59 @@ function setValues(coords) {
 	}
 }
 
+// function arrayToOption(arr, selectId) {
+// 	(e1 => (
+// 		(e1 = document.querySelector('#' + selectId)),
+// 		(e1.innerHTML = '')
+// 		(e1.innerHTML += arr.map(item => `<option> ${item} </option>`).join(''))
+// 	))();
+// }
+
 function arrayToOption(arr, selectId) {
 	(e1 => (
 		(e1 = document.querySelector('#' + selectId)),
 		(e1.innerHTML = '')
-		(e1.innerHTML += arr.map(item => `<option> ${item} </option>`).join(''))
+		(e1.innerHTML += arr.map(item => `<tr> <td>${item}</td></tr>`).join(''))
+		(e1.rows.forEach)
 	))();
+	console.log('HERE')
 }
+
 async function getDataMatches(){
     await axios.get('http://localhost:3000/db')
     .then((data) => {
-		arrayToOption(data.data.msg, 'file')
+
+		let table = document.querySelector('#table'), rIndex;
+		table.innerHTML = ''
+		table.innerHTML += data.data.msg.map(item => `<tr> <td>${item}</td></tr>`).join('')
+      	console.log(table)
+
+		  for (let i=0; i< table.rows.length; i++){
+			table.rows[i].onclick = function() {
+			rIndex = this.rowIndex;
+			document.querySelector("#fname").innerHTML = this.cells[0].innerHTML;
+			}
+      	}
     })
     .catch((err) => {
       	console.log(err)
     })
+}
 
+async function deleteGame(){
+	let fileID = document.querySelector("#fname").innerHTML
+    await axios.delete('http://localhost:3000/deleteGame/'+fileID)
+    .then((data) => {
+		console.log(data)
+	})
+    .catch((err) => {
+      	console.log(err)
+    })
+}
 
+async function DeleteFile(){
+	
+	
 }
 
 async function insertData(userId){

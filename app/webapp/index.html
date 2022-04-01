@@ -29,11 +29,18 @@
         </div>
       </div>
     </div>
+    <div>File selected :</div>
+    <div id="fname"></div>
+    <div style= "height: 120px; width: auto; overflow:auto;">
+      <table id="table" border="1">
+      </table>
+    </div>
     <div class="files">
       <div class="files-forms">
         <label>Choose File</label>
         <select name="file" id="file">
         </select>
+        <button class="delete-button">Delete</button>
         <button class="file-button">Submit</button>
       </div>
     </div>
@@ -50,6 +57,18 @@
     <div class="new-game">
       <button id='bnew-game' class="bnew-game" onclick="window.location.href='./create'">NEW GAME</button>
     </div>
+    <script>
+      let table = document.querySelector('#table'), rIndex;
+      console.log(table)
+      for (let i=0; i< table.rows.length; i++){
+        table.rows[i].onclick = function() {
+          rIndex = this.rowIndex;
+          console.log(rIndex)
+          console.log(this.cells[0].innerHTML)
+          document.querySelector("#fname").innerHTML = 'File selected : ' + this.cells[0].innerHTML;
+        }
+      }
+    </script>
     <script src="dist/pixi.min.js"></script>
     <script src="dist/axios.min.js"></script>
     <script type='module' src="/public/js/game.js"></script>

@@ -211,6 +211,30 @@ app
       res.send(e);
     }
   })
+  
+
+app
+  .route("/deleteGame/:id")
+  .delete(async (req,res) => {
+    const fileID = req.params.id
+    try {
+      const deleteGame = await usersDB.deleteGame(req.session.passport.user, fileID)
+      if (deleteGame == 0){
+          
+          res.status(500).send({"status": "error", "msg": "The game was not delete"});
+      }else{
+        fs.unlink(`../logsGames/${fileID}.txt`, function (err) {
+        if (err){console.log(err)};
+        // if no error, file has been deleted successfully
+        console.log('File deleted!');
+        res.status(200).send({"msg": "The game was deleted correctly"});;
+      });}
+    }
+    catch (e) {
+        res.status(500).send(e);
+    }
+  })
+  
 
 // Start the server
 const PORT = process.env.PORT || 3000;
