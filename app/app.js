@@ -119,10 +119,15 @@ app.get('/register', checkNotAuthenticated, (req, res) => {
 app.post('/register', checkNotAuthenticated, async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
-    usersDB.createUser(req.body.name, req.body.email, hashedPassword)
-    res.redirect('/login')
+    if ((await usersDB.getUserByEmail(req.body.email)).length == 0){
+      usersDB.createUser(req.body.name, req.body.email, hashedPassword)
+      res.redirect('/login')
+    }
+    else {
+      res.redirect('/register')
+    }
   } catch {
-    res.redirect('/register')
+    window.alert('User already exist !')
   }
 })
 
