@@ -55,13 +55,19 @@ class FonceurTestStrategy(Strategy):
 # Strategies work like bricks layered on top of each other
 # Each strategy is essentially composed of other smaller bricks
 
+# Every mindset is technically a class, as it can allow us to change mindsets during a game
+
 # On the surface, we call the bigger bricks the 'mindset' bricks. They define the global
-# playstyle of the player
+# playstyle of the player.
 
 # On a smaller scale, we call the end bricks the 'action bricks'. They return the values
 # needed for the player to operate on the field
 
-# Another type of bricks are the 'transition' bricks, they basically represente a choice
+# Another type of bricks are the 'decision' bricks, they basically represente a choice
 # made depending on the situation
+
+############################### Mindset Class and Bricks ###################################
+
+#################################### Decision Bricks #######################################
 
 ##################################### Action Bricks ########################################
