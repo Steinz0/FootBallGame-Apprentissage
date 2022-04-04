@@ -103,7 +103,7 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
 
 app.delete('/logout', (req, res) => {
   req.logOut()
-  res.redirect('/login')
+  res.redirect('/home')
 })
 
 function checkAuthenticated(req, res, next) {
@@ -142,6 +142,7 @@ app.get('/', (req, res) => {
   res.sendFile(get_path("home.html"));
 });
 app.get('/game', checkAuthenticated, (req, res) => {
+  console.log(req.session)
   res.sendFile(get_path("index.html"));
 });
 app.get('/rules', (req, res) => {
