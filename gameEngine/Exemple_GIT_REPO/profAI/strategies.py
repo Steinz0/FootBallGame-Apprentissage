@@ -13,6 +13,7 @@ class FonceurStrategy(Strategy):
     def __init__(self):
         Strategy.__init__(self,"Fonceur")
     def compute_strategy(self,state,id_team,id_player):
+        print(state, id_team, id_player)
         I = ConditionAttaque(ComportementNaif(SuperState(state,id_team,id_player)))
         return fonceur(I)
 
@@ -47,3 +48,20 @@ class FonceurTestStrategy(Strategy):
             return self.strength
         return None 
 
+############################################################################################
+##################################### Added strategies #####################################
+############################################################################################
+
+# Strategies work like bricks layered on top of each other
+# Each strategy is essentially composed of other smaller bricks
+
+# On the surface, we call the bigger bricks the 'mindset' bricks. They define the global
+# playstyle of the player
+
+# On a smaller scale, we call the end bricks the 'action bricks'. They return the values
+# needed for the player to operate on the field
+
+# Another type of bricks are the 'transition' bricks, they basically represente a choice
+# made depending on the situation
+
+##################################### Action Bricks ########################################
