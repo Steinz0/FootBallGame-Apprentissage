@@ -2,12 +2,12 @@
 
 ## Start
 
-To start the web server, you just need to start this commmand on the app folder: 
+To start the web server, you just need to start this commmand on the app folder (to install nodejs : https://nodejs.org/en/download/): 
 ```
-npm run dev
+npm run start
 ```
 
-Also you need to start RabbitMQ for Celery:
+Also you need to start RabbitMQ for Celery (to install RabbitMQ : https://www.rabbitmq.com/download.html):
 ```
 sudo systemctl enable rabbitmq-server
 sudo systemctl start rabbitmq-server
@@ -16,7 +16,7 @@ To check if rabbitmq started well (status : running)
 ```
 sudo systemctl status rabbitmq-server
 ```
-With **erlang** you can go on localhost:15672 to open the RabbitMq Management
+With **erlang** you can go on localhost:15672 to open the RabbitMQ Management
 
 Now you can run Celery server:
 ```
@@ -31,24 +31,28 @@ celery -A <File-Contain-Celery-App> worker -l info
 
 ### Users
 
-MongoDB again, this dataset registre all logs games for all user.
+This dataset (MongoDB) records all party IDs for each of the users.
 
 For each element:
- - userId
- - logs : lists of all log ids
+ - name
+ - email
+ - password
+ - iDlogs : lists of all party IDs
+ - id : Generate by MongoDB
+  
+### Orders
 
-### Logs Games
-
-MongoDB again, this dataset registre all order for all user.
+This dataset (MongoDB) registre all order for all user.
 
 For each element:
-- userId 
+- userID 
 - ballCoord
 - redCoords : Position x  Position y for all red players
 - blueCoords : Position x  Position y for all red players
 - score
-- ActualPlayer : The position of the player you the order is destinate
+- ActualPlayer : The position of the player who the order is destinate
 - order
+- id : Generate by MongoDB
 
 ### Membres du binôme
   - KRISNI Almehdi
