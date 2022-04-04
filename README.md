@@ -2,12 +2,12 @@
 
 ## Start
 
-To start the web server, you just need to start this commmand on the app folder: 
+To start the web server, you just need to start this commmand on the app folder (to install nodejs : https://nodejs.org/en/download/): 
 ```
-npm run dev
+npm run start
 ```
 
-Also you need to start RabbitMQ for Celery:
+Also you need to start RabbitMQ for Celery (to install RabbitMQ : https://www.rabbitmq.com/download.html):
 ```
 sudo systemctl enable rabbitmq-server
 sudo systemctl start rabbitmq-server
@@ -16,7 +16,7 @@ To check if rabbitmq started well (status : running)
 ```
 sudo systemctl status rabbitmq-server
 ```
-With **erlang** you can go on localhost:15672 to open the RabbitMq Management
+With **erlang** you can go on localhost:15672 to open the RabbitMQ Management
 
 Now you can run Celery server:
 ```

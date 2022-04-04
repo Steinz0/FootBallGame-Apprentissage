@@ -15,6 +15,7 @@ const bcrypt             = require('bcrypt');
 const passport           = require('passport');
 const flash              = require('express-flash');
 const session            = require('express-session');
+const SQLiteStore        = require('connect-sqlite3')(session)
 const methodOverride     = require('method-override');
 const initializePassport = require('./passport-config');
 
@@ -90,7 +91,9 @@ function checkNotAuthenticated(req, res, next) {
 app.set('view-engine', 'ejs')
 app.use(express.urlencoded({ extended: false }))
 app.use(flash())
+
 app.use(session({
+  store: new SQLiteStore,
   secret: "secretwsrhworhpwq",
   resave: false,
   saveUninitialized: false
@@ -133,13 +136,13 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
 
 app.delete('/logout', (req, res) => {
   req.logOut()
-  res.redirect('/login')
+  res.redirect('/home')
 })
 
 
 // RabbiMQ & Celery (for the creation of a new game) 
 
-function Producer(req, res) {
+async function Producer(req, res) {
   let client = celery.createClient(
     "amqp://localhost:5672",
     "amqp://localhost:5672",
@@ -150,11 +153,16 @@ function Producer(req, res) {
   let result = task.applyAsync();
 
   result.get().then(data => {
-    usersDB.addMatch(req.session.passport.user, data)
+    putMatch(req, res, data)
     client.disconnect();
   })
+  
 }
 
+async function putMatch(req, res, data) {
+  await usersDB.addMatch(req.session.passport.user, data)
+  //res.redirect('/game')
+}
 // Other routes  
 
 app.get('/', (req, res) => {
@@ -168,8 +176,9 @@ app.get('/rules', (req, res) => {
 });
 
 app.get('/create', checkAuthenticated, (req, res) => {
-  Producer();
-  res.sendFile(get_path("index.html"));
+  Producer(req, res);
+  res.redirect('game')
+  //res.sendFile(get_path("index.html"));
 });
 
 // Create all HTML routes
