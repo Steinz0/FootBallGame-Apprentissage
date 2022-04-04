@@ -2,9 +2,17 @@
 
 ## Start
 
-To start the web server, you just need to start this commmand on the app folder (to install nodejs : https://nodejs.org/en/download/): 
+For now, the project is only usable in a Linux environment.
+We are looking for solutions on how to make the project usable on macOS and Windows.
+
+To start the web server, you need to use the following commmand while in the **/app** folder : 
 ```
 npm run start
+```
+
+Note - NodeJS is needed in order to make the project runnable. If needed, you can install NodeJS at the following address :
+```
+https://nodejs.org/en/download/
 ```
 
 Also you need to start RabbitMQ for Celery (to install RabbitMQ : https://www.rabbitmq.com/download.html):
@@ -42,7 +50,7 @@ For each element:
   
 ### Orders
 
-This dataset (MongoDB) registre all order for all user.
+The MongoDB dataset registers all orders from all the players.
 
 For each element:
 - userID 
