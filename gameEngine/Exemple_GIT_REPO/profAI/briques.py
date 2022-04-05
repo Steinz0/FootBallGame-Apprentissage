@@ -2,7 +2,7 @@ from mimetypes import init
 from typing_extensions import Self
 from .tools import SuperState, Comportement, ProxyObj
 from soccersimulator import Vector2D,SoccerAction
-from soccersimulator.settings import maxPlayerShoot, maxPlayerSpeed,maxPlayerAcceleration
+from soccersimulator.settings import PLAYERS_PER_TEAM, maxPlayerShoot, maxPlayerSpeed,maxPlayerAcceleration
 
 class ComportementNaif(Comportement):
     RUN_COEF = maxPlayerAcceleration
@@ -16,7 +16,6 @@ class ComportementNaif(Comportement):
 
     # Action - Courir vers
     def run(self,p):
-        print(self.his_team)
         return SoccerAction(acceleration=(p-self.me).normalize()*self.RUN_COEF)
     
     # Action - Se déplacer vers
@@ -43,6 +42,25 @@ class ComportementNaif(Comportement):
             # On récupère les coéquipiers
             return SoccerAction(shoot=(tmpos - self.ball_p).normalize()*self.PASS_COEF)
         return SoccerAction()
+
+    # Action - Marquer le joueur adverse le plus proche de moi
+    def marquageProche(self) :
+        markDistance = 1000000
+        markID = 0
+
+        # On itère sur les joueurs adverses
+        for id in range(PLAYERS_PER_TEAM) :
+            if (self.me.distance(self.player_state(self.his_team, id).position) < markDistance) :
+                markDistance = self.me.distance(self.player_state(self.his_team, id).position)
+                markID = id
+
+        # On se déplace vers le joueur adverse ciblé
+        targetPos = self.player_state(self.his_team, markID).position
+        return SoccerAction(acceleration=(targetPos - self.me).normalize()*self.RUN_COEF)
+
+    # Action - Marquer le joueur adverse le plus proche des cages
+    def marquageProcheBalle(self) :
+        pass
     
 class ConditionDefenseur(ProxyObj):
     COEF_DEF = 0.3 
@@ -72,6 +90,8 @@ class ConditionAttaque(ProxyObj):
 
 # Action de fonceur par défaut
 def fonceur(I):
+    return I.marquageProche()
+
     if not I.can_kick:
         if I.close_ball():
             return I.run(I.ball_p)
@@ -87,3 +107,9 @@ def defenseur(I):
     if I.is_defense():
         return I.degage()+I.run(I.ball_p)
     return I.go((I.ball_p-I.my_goal).normalize()*I.width*0.1+I.my_goal)
+
+"""
+# Comment itérer sur les positions des joueurs adverses
+for i in range(PLAYERS_PER_TEAM) :
+    print(i, "and", self.player_state(self.his_team, i))
+"""

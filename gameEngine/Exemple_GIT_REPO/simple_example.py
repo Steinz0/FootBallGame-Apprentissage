@@ -39,7 +39,7 @@ def create_match(max_steps=500):
     return filename
 
 # Match test pour les strategies
-max_steps=100
+max_steps=1000
 thon = SoccerTeam(name="ThonTeam")
 thon.add("PyPlayer",FonceurStrategy()) #Strategie qui fonce
 thon.add("PyPlayer",RandomStrategy()) #Strategie qui ne fait rien
