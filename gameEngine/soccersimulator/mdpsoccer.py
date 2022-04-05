@@ -250,7 +250,7 @@ class SoccerState(object):
     def copy(self):
         return deepcopy(self)
 
-    def apply_actions(self, actions=None,strategies=None, filename=None, verbose=False):
+    def apply_actions(self, actions=None,strategies=None, savefile=False, filename=None, verbose=False):
         if strategies: 
             self.strategies.update(strategies)
 
@@ -284,7 +284,9 @@ class SoccerState(object):
         if verbose:
             print(self.step,'/',self.max_steps)
             print(self.score)
-        writeFile(filename, self.states.items(), self.ball, 0, self.score)
+            
+        if (savefile) :
+            writeFile(filename, self.states.items(), self.ball, 0, self.score)
 
         
     def _do_goal(self, idx):
