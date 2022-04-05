@@ -2,6 +2,8 @@
 from .mdpsoccer import SoccerAction
 from .utils import Vector2D,dump_jsonz
 import logging
+from .settings import *
+
 ##############################################################################
 # SoccerStrategy
 ##############################################################################
@@ -127,3 +129,66 @@ class DTreeStrategy(Strategy):
             self.logger.error("Erreur : strategie %s non trouve" %(label,))
             return SoccerAction()
         return self.dic[label].compute_strategy(state,id_team,id_player)
+
+
+############################################################################################
+##################################### Added strategies #####################################
+############################################################################################
+
+# Strategies work like bricks layered on top of each other
+# Each strategy is essentially composed of other smaller bricks
+
+# Every mindset is technically a class, as it can allow us to change mindsets during a game
+
+# On the surface, we call the bigger bricks the 'mindset' bricks. They define the global
+# playstyle of the player.
+
+# On a smaller scale, we call the end bricks the 'action bricks'. They return the values
+# needed for the player to operate on the field
+
+# Another type of bricks are the 'decision' bricks, they basically represente a choice
+# made depending on the situation
+
+############################### Mindset Class and Bricks ###################################
+
+# Defenseur fixe
+class DefenseurFixe(Strategy) :
+    def __init__(self):
+        Strategy.__init__(self,"Defenseur Fixe")
+
+    def compute_strategy(self,state,id_team,id_player):
+        print(state, id_team, id_player)
+
+# Milieu fixe
+
+# Attaquant fixe
+
+
+# Marquage
+class ActionMarquage() :
+    pass
+
+#################################### Decision Bricks #######################################
+
+##################################### Action Bricks ########################################
+
+def courtVersCageEquipe(state, id_team, id_play) :
+    pass
+
+def passerCoequipier(state, id_team, id_play) :
+    pass
+
+def avancerVersCagesAdverse(state, id_team, id_play) :
+    pass
+
+def passeProfondeur(state, id_team, id_play) :
+    pass
+
+def courseDirection(state, id_team, id_play) :
+    pass
+
+def degageBalle(state, id_team, id_play) :
+    pass
+
+def marquerJoueur(state, id_team, id_play) :
+    pass
