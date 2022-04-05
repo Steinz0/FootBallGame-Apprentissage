@@ -68,6 +68,41 @@ class FonceurTestStrategy(Strategy):
 
 ############################### Mindset Class and Bricks ###################################
 
+# Defenseur fixe
+class DefenseurFixe(Strategy) :
+    def __init__(self):
+        Strategy.__init__(self,"Fonceur")
+
+    def compute_strategy(self,state,id_team,id_player):
+        print(state, id_team, id_player)
+        I = ConditionAttaque(ComportementNaif(SuperState(state,id_team,id_player)))
+        return fonceur(I)
+
+# Milieu fixe
+
+# Attaquant fixe
+
 #################################### Decision Bricks #######################################
 
 ##################################### Action Bricks ########################################
+
+def courtVersCageEquipe() :
+    pass
+
+def passerCoequipier() :
+    pass
+
+def avancerVersCagesAdverse() :
+    pass
+
+def passeProfondeur() :
+    pass
+
+def courseDirection() :
+    pass
+
+def degageBalle() :
+    pass
+
+def marquerJoueur() :
+    pass
