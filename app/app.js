@@ -96,11 +96,13 @@ app.use(session({
   store: new SQLiteStore,
   secret: "secretwsrhworhpwq",
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
 }))
 
 app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.session({
+  maxAge: 1000 * 60 * 60 * 24
+}))
 app.use(methodOverride('_method'))
 
 //Authentication routes
