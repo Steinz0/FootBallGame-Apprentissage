@@ -90,8 +90,6 @@ class ConditionAttaque(ProxyObj):
 
 # Action de fonceur par défaut
 def fonceur(I):
-    return I.marquageProche()
-
     if not I.can_kick:
         if I.close_ball():
             return I.run(I.ball_p)
