@@ -1,4 +1,4 @@
-from soccersimulator  import Strategy, SoccerAction, Vector2D
+from soccersimulator  import Strategy, SoccerAction, Vector2D, settings
 from .tools import SuperState, Comportement, get_random_SoccerAction
 from .briques import ComportementNaif,ConditionAttaque,ConditionDefenseur,fonceur, defenseur
 import pickle
@@ -9,11 +9,17 @@ class RandomStrategy(Strategy):
     def compute_strategy(self,state,id_team,id_player):
         return get_random_SoccerAction()
 
+class TraditionalDefenderStrategy(Strategy) :
+    def __init__(self):
+        super().__init__(self, "Defenseur Traditionnel")
+
+    def compute_strategy(self, state, id_team, id_player):
+        pass
+
 class FonceurStrategy(Strategy):
     def __init__(self):
         Strategy.__init__(self,"Fonceur")
     def compute_strategy(self,state,id_team,id_player):
-        print(state, id_team, id_player)
         I = ConditionAttaque(ComportementNaif(SuperState(state,id_team,id_player)))
         return fonceur(I)
 
@@ -47,62 +53,3 @@ class FonceurTestStrategy(Strategy):
         if self.strength is not None:
             return self.strength
         return None 
-
-############################################################################################
-##################################### Added strategies #####################################
-############################################################################################
-
-# Strategies work like bricks layered on top of each other
-# Each strategy is essentially composed of other smaller bricks
-
-# Every mindset is technically a class, as it can allow us to change mindsets during a game
-
-# On the surface, we call the bigger bricks the 'mindset' bricks. They define the global
-# playstyle of the player.
-
-# On a smaller scale, we call the end bricks the 'action bricks'. They return the values
-# needed for the player to operate on the field
-
-# Another type of bricks are the 'decision' bricks, they basically represente a choice
-# made depending on the situation
-
-############################### Mindset Class and Bricks ###################################
-
-# Defenseur fixe
-class DefenseurFixe(Strategy) :
-    def __init__(self):
-        Strategy.__init__(self,"Fonceur")
-
-    def compute_strategy(self,state,id_team,id_player):
-        print(state, id_team, id_player)
-        I = ConditionAttaque(ComportementNaif(SuperState(state,id_team,id_player)))
-        return fonceur(I)
-
-# Milieu fixe
-
-# Attaquant fixe
-
-#################################### Decision Bricks #######################################
-
-##################################### Action Bricks ########################################
-
-def courtVersCageEquipe() :
-    pass
-
-def passerCoequipier() :
-    pass
-
-def avancerVersCagesAdverse() :
-    pass
-
-def passeProfondeur() :
-    pass
-
-def courseDirection() :
-    pass
-
-def degageBalle() :
-    pass
-
-def marquerJoueur() :
-    pass
