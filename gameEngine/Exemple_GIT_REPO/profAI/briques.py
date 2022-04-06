@@ -72,11 +72,6 @@ class ConditionDefenseur(ProxyObj):
 class ConditionTraditionalDefender(ProxyObj) :
     def __init__(self, state):
         super(ConditionTraditionalDefender,self).__init__(state)
-    # Situation - Est en défense
-
-    # Situation - Est proche d'un adversaire
-
-    # Situation - Est loin d'un adversaire
 
 class ConditionAttaque(ProxyObj):
     COEF_SHOOT = 0.2
@@ -105,6 +100,8 @@ def defenseur(I):
     if I.is_defense():
         return I.degage()+I.run(I.ball_p)
     return I.go((I.ball_p-I.my_goal).normalize()*I.width*0.1+I.my_goal)
+
+# Stratégie - Défenseur traditionnel
 
 """
 # Comment itérer sur les positions des joueurs adverses
