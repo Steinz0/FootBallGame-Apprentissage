@@ -4,21 +4,30 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="public/css/home.css" />
     <title>Football Game</title>
 </head>
 <body>
-    <h1>Football Game et Apprentissage</h1>
-    <h4>
-        <br><a href="./game">GO ON THE GAME</a>
-    </h4>
-    <h4>
-        <br><a href="./create">CREATE NEW GAME</a>
-    </h4>
-    <h4>
-        <br><a href="./rules">Rules</a>
-    </h4>
-    <h4>
-        <br><a href="https://github.com/Steinz0/FootBallGame-Apprentissage">Documentation</a>
-    </h4>
+    <div class="banner">
+        <div class="navbar">
+            <ul>
+                <li><a href="./game">Play</a></li>
+                <li><a href="./create">Create Game</a></li>
+                <li><a href="./rules">Rules</a></li>
+                <li><a href="https://github.com/Steinz0/FootBallGame-Apprentissage">Documentation</a></li>
+            </ul>
+        </div>
+
+        <div class="content">
+            <h1>Football et Apprentissage</h1>
+            <h4><button type="button" onclick="window.location.href = './game';"><span></span>Play</button></h4>
+            <h4><button type="button" onclick="window.location.href = './create';"><span></span>Create Game</button></h4>
+            <h4><button type="button" onclick="window.location.href = './rules';"><span></span>Rules</button></h4>
+            <form action="https://github.com/Steinz0/FootBallGame-Apprentissage">
+                <button type="submit"><span></span>Documentation</button>
+            </form>
+        </div>
+    </div>
+    
 </body>
 </html>
