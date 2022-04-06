@@ -47,7 +47,7 @@ function get_path(file){
 // Load Databases
 
 console.log('Loading MongoDB Users ...');
-const db2 = new Datastore({filename: './users.db', autoload: true})
+const db2 = new Datastore({filename: './app/users.db', autoload: true})
 db2.loadDatabase(err => {
   if (err) console.log('Error Database Users:', err); 
   else console.log('MongoDB Users OK!');
@@ -56,7 +56,7 @@ db2.loadDatabase(err => {
 const usersDB = new UserDB.default(db2)
 
 console.log('Loading MongoDB Orders ...');
-const db1 = new Datastore({filename: './database.db', autoload: true})
+const db1 = new Datastore({filename: './app/database.db', autoload: true})
 db1.loadDatabase(err => {
     if (err) console.log('Error Database Orders:', err); 
     else console.log('MongoDB Orders OK!');
@@ -66,7 +66,6 @@ db1.loadDatabase(err => {
 const ordersDB = new orderDB.default(db1)
 
 // Authentication
-
 initializePassport(
   passport,
   email => usersDB.getUserByEmail(email),
@@ -89,6 +88,7 @@ function checkNotAuthenticated(req, res, next) {
 }
 
 app.set('view-engine', 'ejs')
+ app.set('views', path.join(__dirname, 'webapp/views'));
 app.use(express.urlencoded({ extended: false }))
 app.use(flash())
 

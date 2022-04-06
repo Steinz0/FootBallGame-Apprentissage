@@ -15,7 +15,6 @@ def read_package_variable(key):
     assert 0, "'{0}' not found in '{1}'".format(key, module_path)
 
 
-
 setup(
     name=read_package_variable('__project__'),
     version=read_package_variable('__version__'),

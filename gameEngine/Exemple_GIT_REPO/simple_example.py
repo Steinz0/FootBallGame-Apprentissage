@@ -10,14 +10,6 @@ celery_app.conf.update(
     CELERY_ROUTES = {"create_match": {"queue": "create_match"}},
 )
 
-# @celery_app.task
-# def one(text):
-#     return text[::-1]
-
-# @celery_app.task
-# def print_hello():
-#     return "hello"
-
 @celery_app.task
 def create_match(max_steps=500):
     ## Creation d'une equipe
