@@ -36,12 +36,9 @@ thon = SoccerTeam(name="ThonTeam")
 thon.add("PyPlayer",FonceurStrategy()) #Strategie qui fonce
 thon.add("PyPlayer",RandomStrategy()) #Strategie qui ne fait rien
 
-for p in thon.players :
-    print(p)
-
 thon2 = SoccerTeam(name="ThonTeam2")
 thon2.add("PyPlayer",RandomStrategy()) #Strategie qui ne fait rien
-thon2.add("PyPlayer",st.TradDefStrategy()) #Strategie qui ne fait rien
+thon2.add("PyPlayer",st.TradDefStrategy(0.9, 0.8)) #Strategie qui ne fait rien
 
 #Creation d'une partie
 simu = Simulation(thon,thon2,max_steps=max_steps)
