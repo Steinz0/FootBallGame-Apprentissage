@@ -1,6 +1,6 @@
 from soccersimulator  import Strategy, SoccerAction, Vector2D, settings
 from .tools import SuperState, Comportement, get_random_SoccerAction
-from .briques import ComportementNaif,ConditionAttaque,ConditionDefenseur, ConditionTraditionalDefender,fonceur, defenseur, tradDefenseur
+from .briques import *
 import pickle
 
 class RandomStrategy(Strategy):
@@ -34,7 +34,19 @@ class TradDefStrategy(Strategy) :
 
 ############################################ STRATEGIES EQUILIBREES ##########################################
 
+# Stratégie - Passeur fou
+class CrazyPassStrategy(Strategy) :
+    # Init
+    def __init__(self, coefPass, coefBall, coefGoal):
+        Strategy.__init__(self, "Passeur Fou")
+        self.COEF_PASS = coefPass
+        self.COEF_BALL = coefBall
+        self.COEF_GOAL = coefGoal
 
+    # Calcul de stratégie
+    def compute_strategy(self, state, id_team, id_player):
+        I = ConditionCrazyPass(ComportementNaif(SuperState(state, id_team, id_player)), self.COEF_PASS, self.COEF_BALL, self.COEF_GOAL)
+        return crazyPasser(I)
 
 ############################################ STRATEGIES OFFENSIVES ##########################################
 

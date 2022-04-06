@@ -9,7 +9,9 @@ class ComportementNaif(Comportement):
     # Coefficients d'actions
     RUN_COEF = maxPlayerAcceleration
     GO_COEF = maxPlayerAcceleration / 3.
-    SHOOT_COEF = maxPlayerShoot / 3.
+
+    SHOOT_COEF = maxPlayerShoot
+    DRIBBLE_COEF = maxPlayerShoot / 3.
     THROW_COEF = maxPlayerShoot
     PASS_COEF = maxPlayerShoot / 2.
 
@@ -142,9 +144,9 @@ def defenseur(I):
 # Condition - Defenseur Traditionnel
 class ConditionTraditionalDefender(ProxyObj) :
     def __init__(self, state, coefDef, coefBall):
+        super(ConditionTraditionalDefender,self).__init__(state)
         self.COEF_DEF = coefDef
         self.COEF_BALL = coefBall
-        super(ConditionTraditionalDefender,self).__init__(state)
 
     # Status - Est en défense
     def is_defense(self):
@@ -163,6 +165,42 @@ def tradDefenseur(I) :
             return I.go((I.ball_p-I.my_goal).normalize()*I.width*0.1+I.my_goal)
     else :
         return I.run(I.advClosestSelf())
+
+############################################ CONDITIONS MILIEU ##############################################
+
+# Condition - Passeur fou
+class ConditionCrazyPass(ProxyObj) :
+    def __init__(self, state, coefPass, coefBall, coefGoal) :
+        super(ConditionCrazyPass,self).__init__(state)
+        self.COEF_PASS = coefPass
+        self.COEF_BALL = coefBall
+        self.COEF_GOAL = coefGoal
+
+    # Status - Est proche d'un coéquipier
+    def close_teammate(self) :
+        return self.me.distance(self.findClosestTeammate()) < self.COEF_PASS * self.width
+
+    # Status - Est proche de la balle
+    def close_ball(self):
+        return self.me.distance(self.ball_p)<self.COEF_BALL*self.width
+
+# Action
+def crazyPasser(I) :
+    if I.close_ball() :
+        if I.can_kick :
+            if I.close_teammate() :
+                return I.kick(I.findClosestTeammate())
+            else :
+                if I.close_goal() :
+                    return I.degage()
+                else :
+                    return I.shoot()
+        else :
+            return I.run(I.ball_p)
+    else :
+        return I.run(I.ball_p)
+
+            
 
 ############################################ CONDITIONS OFFENSIVES ##########################################
 
