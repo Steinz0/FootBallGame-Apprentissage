@@ -1,6 +1,6 @@
-from tabnanny import verbose
 from soccersimulator import SoccerTeam, Simulation, show_simu
 from profAI import RandomStrategy,FonceurStrategy,FonceurTestStrategy,DefenseurStrategy,get_team
+from profAI import strategies as st
 from celery import Celery
 import random as random
 
@@ -49,7 +49,7 @@ for p in thon.players :
 
 thon2 = SoccerTeam(name="ThonTeam2")
 thon2.add("PyPlayer",RandomStrategy()) #Strategie qui ne fait rien
-thon2.add("PyPlayer",RandomStrategy()) #Strategie qui ne fait rien
+thon2.add("PyPlayer",st.TradDefStrategy()) #Strategie qui ne fait rien
 
 #Creation d'une partie
 simu = Simulation(thon,thon2,max_steps=max_steps)

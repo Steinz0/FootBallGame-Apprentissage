@@ -1,6 +1,6 @@
 from soccersimulator  import Strategy, SoccerAction, Vector2D, settings
 from .tools import SuperState, Comportement, get_random_SoccerAction
-from .briques import ComportementNaif,ConditionAttaque,ConditionDefenseur,fonceur, defenseur
+from .briques import ComportementNaif,ConditionAttaque,ConditionDefenseur, ConditionTraditionalDefender,fonceur, defenseur, tradDefenseur
 import pickle
 
 class RandomStrategy(Strategy):
@@ -9,12 +9,13 @@ class RandomStrategy(Strategy):
     def compute_strategy(self,state,id_team,id_player):
         return get_random_SoccerAction()
 
-class TraditionalDefenderStrategy(Strategy) :
+class TradDefStrategy(Strategy) :
     def __init__(self):
-        super().__init__(self, "Defenseur Traditionnel")
+        Strategy.__init__(self, "Defenseur Traditionnel")
 
     def compute_strategy(self, state, id_team, id_player):
-        pass
+        I = ConditionTraditionalDefender(ComportementNaif(SuperState(state,id_team,id_player)), 0.2)
+        return tradDefenseur(I)
 
 class FonceurStrategy(Strategy):
     def __init__(self):
