@@ -55,6 +55,17 @@ class UserDB{
         }) 
     }
 
+    getUsers(){
+        return new Promise((resolve, reject) => {
+            this.db.find({}).exec( function (err, result) {
+                if (err){
+                    reject(err);
+                }
+                resolve(result);
+            });
+        }) 
+    }
+
     async deleteGame(userID, fileID){
         const user = await this.getUserByid(userID)
         let listMatches = user[0].idMatches
