@@ -5,12 +5,16 @@ from soccersimulator import Vector2D,SoccerAction
 from soccersimulator.settings import PLAYERS_PER_TEAM, maxPlayerShoot, maxPlayerSpeed,maxPlayerAcceleration
 
 class ComportementNaif(Comportement):
+    # Coefficients d'actions
     RUN_COEF = maxPlayerAcceleration
-    GO_COEF = maxPlayerAcceleration/3.
-    SHOOT_COEF = maxPlayerShoot/3.
+    GO_COEF = maxPlayerAcceleration / 3.
+    SHOOT_COEF = maxPlayerShoot / 3.
     THROW_COEF = maxPlayerShoot
-    PASS_COEF = maxPlayerShoot/2.
+    PASS_COEF = maxPlayerShoot / 2.
 
+    # Coefficients de situation
+
+    # Init
     def __init__(self,state):
         super(ComportementNaif,self).__init__(state)
 
@@ -45,13 +49,15 @@ class ComportementNaif(Comportement):
 
     # Action - Marquer le joueur adverse le plus proche de moi
     def marquageProche(self) :
+        # Variables de recherche
         markDistance = 1000000
         markID = 0
 
         # On itère sur les joueurs adverses
         for id in range(PLAYERS_PER_TEAM) :
-            if (self.me.distance(self.player_state(self.his_team, id).position) < markDistance) :
-                markDistance = self.me.distance(self.player_state(self.his_team, id).position)
+            dist = self.me.distance(self.player_state(self.his_team, id).position)
+            if (dist < markDistance) :
+                markDistance = dist
                 markID = id
 
         # On se déplace vers le joueur adverse ciblé
@@ -61,6 +67,25 @@ class ComportementNaif(Comportement):
     # Action - Marquer le joueur adverse le plus proche des cages
     def marquageProcheBalle(self) :
         pass
+
+    # Recherche - Coéquipier le plus proche et renvoie sa position
+    def findClosestTeammate(self) :
+        # Variables de recherche
+        tmDistance = 1000000
+        tmID = 0
+        (idT , idP) = self.key # Indice à ne pas étudier (il s'agit du joueur lui-même)
+
+        # On itère sur les joueurs de l'équipe
+        for id in range(PLAYERS_PER_TEAM) :
+            if (id != idP) :
+                dist = self.me.distance(self.player_state(idT, idP).position)
+                if (dist < tmDistance) :
+                    tmDistance = dist
+                    tmID = id
+
+        # On retourne la position du coéquipier
+        return self.player_state(idT, tmID).position
+
     
 class ConditionDefenseur(ProxyObj):
     COEF_DEF = 0.3 
@@ -91,6 +116,7 @@ def fonceur(I):
         else:
             return I.run(I.ball_p)
     else:
+        return I.passeBalle(I.findClosestTeammate())
         if I.close_goal():
             return I.shoot()
     return I.degage()
