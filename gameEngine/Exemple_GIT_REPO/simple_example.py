@@ -1,6 +1,6 @@
-from tabnanny import verbose
 from soccersimulator import SoccerTeam, Simulation, show_simu
 from profAI import RandomStrategy,FonceurStrategy,FonceurTestStrategy,DefenseurStrategy,get_team
+from profAI import strategies as st
 from celery import Celery
 import random as random
 
@@ -32,15 +32,15 @@ def create_match(max_steps=500):
 
 # Match test pour les strategies
 max_steps=1000
+
+# Création Equipe 1
 thon = SoccerTeam(name="ThonTeam")
-thon.add("PyPlayer",FonceurStrategy()) #Strategie qui fonce
+thon.add("PyPlayer",RandomStrategy()) #Strategie qui fonce
 thon.add("PyPlayer",RandomStrategy()) #Strategie qui ne fait rien
 
-for p in thon.players :
-    print(p)
-
+# Création Equipe 2
 thon2 = SoccerTeam(name="ThonTeam2")
-thon2.add("PyPlayer",RandomStrategy()) #Strategie qui ne fait rien
+thon2.add("PyPlayer",st.CrazyPassStrategy(0.5, 0.5, 0.2)) #Strategie qui ne fait rien
 thon2.add("PyPlayer",RandomStrategy()) #Strategie qui ne fait rien
 
 #Creation d'une partie
