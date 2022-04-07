@@ -1,0 +1,12 @@
+rabbitmq:
+  image: tutum/rabbitmq
+  environment:
+    - RABBITMQ_PASS=mypass
+  ports:
+    - "5672:5672"   
+    - "15672:15672"
+celery:
+  build: .
+  command: celery -A simple-example worker
+  links:
+    - rabbitmq:rabbit
