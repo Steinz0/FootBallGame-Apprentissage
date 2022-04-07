@@ -138,7 +138,7 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
 
 app.delete('/logout', (req, res) => {
   req.logOut()
-  res.redirect('/home')
+  res.redirect('/')
 })
 
 
@@ -171,7 +171,7 @@ app.get('/', (req, res) => {
   res.sendFile(get_path("home.html"));
 });
 app.get('/game', checkAuthenticated, (req, res) => {
-  res.sendFile(get_path("index.html"));
+  res.render('index.ejs')//sendFile(get_path("index.html"));
 });
 app.get('/rules', (req, res) => {
   res.sendFile(get_path("rules.html"));
