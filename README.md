@@ -2,7 +2,7 @@
 
 ## Start
 
-# With Docker
+### With Docker
 
 To start the environnement, you just need to start the Docker compose.
 
@@ -15,7 +15,7 @@ And after that you can start it:
 sudo docker-compose up
 ```
 
-# Without Docker
+### Without Docker
 
 Not the best idea, but you can by following these commands and don't forget to change the AMQP URL by localhost:5672
 
