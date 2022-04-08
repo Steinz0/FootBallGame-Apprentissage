@@ -1,4 +1,4 @@
-from soccersimulator import SoccerTeam, Simulation, show_simu,KeyboardStrategy,DTreeStrategy,load_jsonz,dump_jsonz
+from soccersimulator import SoccerTeam, Simulation, KeyboardStrategy,DTreeStrategy,load_jsonz,dump_jsonz#, show_simu
 from soccersimulator import apprend_arbre, build_apprentissage, genere_dot
 from profAI import FonceurStrategy,DefenseurStrategy,SuperState
 import sklearn

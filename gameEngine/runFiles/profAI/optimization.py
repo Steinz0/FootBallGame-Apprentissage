@@ -1,6 +1,6 @@
 # coding: utf-8
 from __future__ import print_function, division
-from soccersimulator import SoccerTeam, Simulation, Strategy, show_simu, Vector2D
+from soccersimulator import SoccerTeam, Simulation, Strategy, Vector2D#, show_simu
 from soccersimulator.settings import GAME_WIDTH, GAME_HEIGHT
 
 
@@ -14,7 +14,7 @@ class ParamSearch(object):
         self.max_steps = max_steps
         self.max_round_step = max_round_step
 
-    def start(self, show=True):
+    def start(self, show=False):
         if not self.simu:
             team1 = SoccerTeam("Team 1")
             team2 = SoccerTeam("Team 2")

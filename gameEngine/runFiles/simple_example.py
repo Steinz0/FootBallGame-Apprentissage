@@ -1,16 +1,17 @@
-from soccersimulator import SoccerTeam, Simulation, show_simu
+from soccersimulator import SoccerTeam, Simulation#, show_simu
 from profAI import RandomStrategy,FonceurStrategy,FonceurTestStrategy,DefenseurStrategy,get_team
 from profAI import strategies as st
 from celery import Celery
 import random as random
 
-# celery_app = Celery('tasks', backend='amqp://localhost:5672', broker='amqp://localhost:5672')
+celery_app = Celery('tasks', backend='amqp://guest:guest@rabbit:5672', broker='amqp://guest:guest@rabbit:5672')
 
-# celery_app.conf.update(
-#     CELERY_ROUTES = {"create_match": {"queue": "create_match"}},
-# )
+celery_app.conf.update(
+    CELERY_ROUTES = {"create_match": {"queue": "create_match"}},
+)
 
-# @celery_app.task
+
+@celery_app.task
 def create_match(max_steps=500):
     print("IN CREATION")
     ## Creation d'une equipe
@@ -31,7 +32,7 @@ def create_match(max_steps=500):
 
     return filename
 
-create_match()
+# # create_match()
 # # Match test pour les strategies
 # max_steps=1000
 
