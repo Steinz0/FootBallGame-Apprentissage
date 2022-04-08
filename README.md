@@ -11,7 +11,7 @@ sudo docker-compose up
 
 ### Without Docker
 
-Not the best idea, but you can by following these commands and don't forget to change the AMQP URL by localhost:5672
+Not the best idea, but you can by following these commands and changing the AMQP URL to localhost:5672
 
 To start the web server, you need to use the following commmand while in the **/** directory (to install nodejs : https://nodejs.org/en/download/) : 
 ```
