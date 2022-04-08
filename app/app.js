@@ -146,8 +146,8 @@ app.delete('/logout', (req, res) => {
 
 async function Producer(req, res) {
   let client = celery.createClient(
-    "amqp://localhost:5672",
-    "amqp://localhost:5672",
+    "amqp://guest:guest@rabbit:5672",
+    "amqp://guest:guest@rabbit:5672",
     "celery"
   );
 
