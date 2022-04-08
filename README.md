@@ -4,13 +4,7 @@
 
 ### With Docker
 
-To start the environnement, you just need to start the Docker compose.
-
-First, you need to build him:
-```
-sudo docker-compose build
-```
-And after that you can start it:
+To start the environnement, you just need start the Docker compose.
 ```
 sudo docker-compose up
 ```
