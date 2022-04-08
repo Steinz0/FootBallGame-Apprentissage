@@ -4,7 +4,7 @@
 
 # With Docker
 
-To start the environemment, you just need to start the Docker compose.
+To start the environnement, you just need to start the Docker compose.
 
 First, you need to build him:
 ```
