@@ -61,7 +61,7 @@ For each element, we save :
 - userID 
 - ballCoord
 - redCoords ( position (x,y) for every red player )
-- blueCoords ( osition (x,y) for every blue player )
+- blueCoords ( position (x,y) for every blue player )
 - score
 - ActualPlayer : The position of the player who the order is destinate
 - order
