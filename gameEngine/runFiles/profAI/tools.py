@@ -1,8 +1,8 @@
 from soccersimulator import Vector2D, SoccerAction
 from soccersimulator.settings import GAME_GOAL_HEIGHT,GAME_HEIGHT, GAME_WIDTH,BALL_RADIUS,PLAYER_RADIUS
 
-def get_random_vec():
-    return Vector2D.create_random(-1,1)
+def get_random_vec(factor=1):
+    return Vector2D.create_random(-1 * factor,1 * factor)
 
 def get_random_SoccerAction():
     return SoccerAction(get_random_vec(),get_random_vec())
@@ -28,10 +28,10 @@ class SuperState(ProxyObj):
         return self.player_state(*self.key).position
     @property
     def my_goal(self):
-        return Vector2D((self.my_team-1)*self.width,self.goal_center)
+        return Vector2D((self.my_team-1)*self.width,self.goal_center - (GAME_GOAL_HEIGHT / 2.))
     @property
     def his_goal(self):
-        return Vector2D((self.his_team-1)*self.width,self.goal_center)
+        return Vector2D((self.his_team-1)*self.width,self.goal_center - (GAME_GOAL_HEIGHT / 2.))
     @property
     def ball_p(self):
         return self.ball.position
@@ -50,8 +50,24 @@ class SuperState(ProxyObj):
     @property
     def goal_radius(self):
         return GAME_GOAL_HEIGHT/2.
+    # Fonctions ajoutées
+    @property
+    def no_possession(self) :
+        # Aucune équipe n'a la possesion de la balle
+        return self.last_hit[0] == 0
+    @property
+    def team_possession(self) :
+        # L'équipe a la balle ou non
+        return self.last_hit[0] == self.key[0]
+    @property
+    def updateLH(self) :
+        # Mise à jour du dernier joueur ayant tiré
+        self.last_hit = self.key
+
     def distance(self,p):
         return self.me.distance(p)
+
+    
 
 class Comportement(ProxyObj):
     def __init__(self,obj):
