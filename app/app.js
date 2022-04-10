@@ -236,10 +236,9 @@ app
     try {
       const deleteGame = await usersDB.deleteGame(req.session.passport.user, fileID)
       if (deleteGame == 0){
-          
           res.status(500).send({"status": "error", "msg": "The game was not delete"});
       }else{
-        fs.unlink(`../logsGames/${fileID}.txt`, function (err) {
+        fs.unlink(`logsGames/${fileID}.txt`, function (err) {
         if (err){console.log(err)};
         // if no error, file has been deleted successfully
         console.log('File deleted!');
@@ -251,6 +250,16 @@ app
     }
   })
   
+app.get('/admin', async (req, res) => {
+  let user = await usersDB.getAdmin()
+  console.log(user[0]._id)
+  console.log(req.session.passport.user)
+  if (req.session.passport.user == user[0]._id) {
+    res.sendFile(get_path("admin.html"));
+  }else{
+    res.redirect('/')
+  }
+});
 
 // Start the server
 

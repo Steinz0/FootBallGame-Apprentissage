@@ -12,9 +12,10 @@ let filename = 'file_data'
 const Application = PIXI.Application;
 
 const stadium = new Application({
+	forceCanvas: true,
 	width: 1200,
 	height: 700,
-	backgroundColor: 0xAAFFAA
+	backgroundColor: 0xAAFFAA,
 })
 
 const graphics = new PIXI.Graphics();
@@ -44,7 +45,7 @@ graphics.lineTo(settings.FIELDWIDTH, settings.FIELDHEIGTH / 2 + settings.GOALHEI
 stadium.stage.addChild(graphics);
 
 // Adding to the window 
-document.body.appendChild(stadium.view)
+document.getElementById("mid-center").appendChild(stadium.view)
 
 stadium.loader.baseUrl = '/public/img'
 stadium.loader
@@ -65,10 +66,7 @@ deleteB.addEventListener("click", deleteGame);
 const submit = document.getElementsByClassName("submit-button")[0]; 
 submit.addEventListener("click", insertData);
 
-const testB = document.getElementsByClassName("test")[0]; 
-testB.addEventListener("click", getDataMatches);
-
-const fileB = document.getElementsByClassName("file-button")[0]; 
+const fileB = document.getElementsByClassName("file-button-show")[0]; 
 fileB.addEventListener("click", setFilename);
 
 function show(e) {
@@ -135,7 +133,6 @@ function drawLine(obj, x, y, vectx, vecty) {
 
 
 function setFilename() {
-	console.log(document.querySelector('#fname').innerHTML)
 	filename = document.querySelector('#fname').innerHTML
 }
 function setSituation() {
@@ -151,7 +148,6 @@ function setSituation() {
             if(rawFile.status === 200 || rawFile.status == 0)
             {
                 let allText = rawFile.responseText.split("\n")			
-				// let checker = allText[0].split("\r")[0]
 				let coords = allText.slice(1, allText.length)
 				setValues(coords[x])
             }
@@ -185,10 +181,13 @@ function playGameFile() {
 function setValues(coords) {
 	if (coords != undefined){
 		let c = coords.split(" ")
-		
-		score = [c[1], c[0]]
-		document.getElementById("blueTeamScore").innerHTML = c[1]
+		if (score[1] < c[1]) {
+			console.log('IN')
+			console.log(document.getElementById("fireworks-rights"))
+		}
+		score = [c[0], c[1]]
 		document.getElementById("redTeamScore").innerHTML = c[0]
+		document.getElementById("blueTeamScore").innerHTML = c[1]
 
 		let ball_c = c.slice(2, 6)
 		let reds_c = c.slice(6, 6 + redTeam.length*4)
@@ -211,24 +210,6 @@ function setValues(coords) {
 			blueTeam[i].speed.y = blues_c[i*4+3]
 		}
 	}
-}
-
-// function arrayToOption(arr, selectId) {
-// 	(e1 => (
-// 		(e1 = document.querySelector('#' + selectId)),
-// 		(e1.innerHTML = '')
-// 		(e1.innerHTML += arr.map(item => `<option> ${item} </option>`).join(''))
-// 	))();
-// }
-
-function arrayToOption(arr, selectId) {
-	(e1 => (
-		(e1 = document.querySelector('#' + selectId)),
-		(e1.innerHTML = '')
-		(e1.innerHTML += arr.map(item => `<tr> <td>${item}</td></tr>`).join(''))
-		(e1.rows.forEach)
-	))();
-	console.log('HERE')
 }
 
 async function getDataMatches(){
@@ -261,11 +242,6 @@ async function deleteGame(){
     .catch((err) => {
       	console.log(err)
     })
-}
-
-async function DeleteFile(){
-	
-	
 }
 
 async function insertData(userId){
