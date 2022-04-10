@@ -91,6 +91,10 @@ class ComportementNaif(Comportement):
         # On retourne la position du coéquipier
         return self.player_state(idT, tmID).position
 
+    # Mise à jour - Dernier joueur ayant tiré sur la balle
+    def updLastHit(self) :
+        self.last_hit = self.key
+
     # Recherche - Retourne la position de l'adversaire le plus proche de soi
     def advClosestSelf(self) :
         # Variables de recherche
@@ -215,6 +219,8 @@ class ConditionAttaque(ProxyObj):
     def close_ball(self):
         return self.me.distance(self.ball_p)<self.COEF_BALL*self.width
 
+# Action - Attaquant traditionnel
+
 # Action de fonceur par défaut
 def fonceur(I) :
     if not I.can_kick :
@@ -224,7 +230,9 @@ def fonceur(I) :
             return I.run(I.ball_p)
     else :
         if I.close_goal() :
+            I.updLastHit()
             return I.shoot()
+    I.updLastHit()
     return I.degage()
 
 

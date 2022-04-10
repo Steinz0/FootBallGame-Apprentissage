@@ -191,6 +191,7 @@ class SoccerState(object):
     def __init__(self,states=None,ball=None,**kwargs):
         self.states = states or dict()
         self.ball = ball or Ball()
+        self.last_hit = (0,0) # Init à (0,0), soit aucune équipe n'a encore touché la balle
         self.strategies = kwargs.pop('strategies',dict())
         self.score = kwargs.pop('score', {1: 0, 2: 0})
         self.step = kwargs.pop('step', 0)
@@ -305,6 +306,7 @@ class SoccerState(object):
         return state
 
     def reset_state(self, nb_players_1=0, nb_players_2=0):
+        self.last_hit = (0,0)
         if nb_players_1 == 0 and self.nb_players(1) > 0:
             nb_players_1 = self.nb_players(1)
         if nb_players_2 == 0 and self.nb_players(2) > 0:
