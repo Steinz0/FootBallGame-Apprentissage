@@ -1,6 +1,6 @@
 # coding: utf-8
 from __future__ import print_function, division
-from soccersimulator import SoccerTeam, Simulation, Strategy, show_simu, Vector2D
+from soccersimulator import SoccerTeam, Simulation, Strategy, Vector2D#, show_simu
 from soccersimulator.settings import GAME_WIDTH, GAME_HEIGHT
 from .strategies import FonceurTestStrategy
 import pickle
@@ -20,7 +20,7 @@ class SimpleParamSearch(object):
             for j in range(discret):
                 self.list_grille.append(Vector2D(GAME_WIDTH/2.+self.stepx*i,self.stepy*j))
         self.strategy= FonceurTestStrategy()
-    def start(self, show=True):
+    def start(self, show=False):
         team1 = SoccerTeam("Team 1")
         team1.add("Test tire", self.strategy)
         self.simu = Simulation(team1, max_steps=100000)

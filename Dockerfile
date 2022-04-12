@@ -12,11 +12,7 @@ COPY /app/*.db /foot/app/
 COPY /gameEngine /foot/gameEngine
 COPY /logsGames /foot/logsGames 
 COPY run_celery.sh /foot
-# RUN apt-get update -y
-# RUN apt-get install -y freeglut3-dev
 RUN pip install -e /foot/gameEngine --user
 RUN pip install celery==4.4.6
 RUN pip install typing-extensions
-# CMD ["node", "app/app.js"]
-# CMD ["ls", "app"]
 CMD ./run_celery.sh
