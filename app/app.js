@@ -3,7 +3,8 @@
 var fs                   = require('fs');
 var path                 = require("path");
 var cors                 = require('cors');
-
+var JSZip                = require("jszip");
+var FileSaver            = require('file-saver');
 const express            = require('express');
 
 const celery             = require('celery-node');
@@ -236,10 +237,9 @@ app
     try {
       const deleteGame = await usersDB.deleteGame(req.session.passport.user, fileID)
       if (deleteGame == 0){
-          
           res.status(500).send({"status": "error", "msg": "The game was not delete"});
       }else{
-        fs.unlink(`../logsGames/${fileID}.txt`, function (err) {
+        fs.unlink(`logsGames/${fileID}.txt`, function (err) {
         if (err){console.log(err)};
         // if no error, file has been deleted successfully
         console.log('File deleted!');
@@ -251,6 +251,32 @@ app
     }
   })
   
+app.get('/admin', async (req, res) => {
+  downloadLogs();
+});
+
+async function readTextFile(filename) {
+  try {
+    const data = fs.readFileSync(filename, 'utf8')
+    return data
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+async function downloadLogs(){
+  let zip = new JSZip();
+
+  const filesLogs = fromDir(path.join(__dirname, "../logsGames/"),'.txt');
+  filesLogs.forEach(e => {
+    let data = readTextFile(e)
+    zip.file(e.split('\\').at(-1), data)
+  });
+  zip.generateAsync({type:'nodebuffer'})
+  .then(function(content) {
+    FileSaver.saveAs(content, "download.zip")
+  })
+}
 
 // Start the server
 

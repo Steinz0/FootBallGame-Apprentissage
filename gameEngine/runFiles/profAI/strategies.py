@@ -13,40 +13,12 @@ class RandomStrategy(Strategy):
 
 # Stratégie - Défenseur par défaut
 class DefenseurStrategy(Strategy):
-    def __init__(self):
+    def __init__(self, lastHit):
         Strategy.__init__(self, "Defenseur")
+        self.last_hit = lastHit
     def compute_strategy(self,state,id_team,id_player):
-        I = ConditionDefenseur(ComportementNaif(SuperState(state,id_team,id_player)))
-        return defenseur(I)
-
-# Stratégie - Défenseur traditionnel
-class TradDefStrategy(Strategy) :
-    # Init
-    def __init__(self, coefDef, coefBall):
-        Strategy.__init__(self, "Defenseur Traditionnel")
-        self.COEF_DEF = coefDef
-        self.COEF_BALL = coefBall
-
-    # Calcul de strategie
-    def compute_strategy(self, state, id_team, id_player):
-        I = ConditionTraditionalDefender(ComportementNaif(SuperState(state,id_team,id_player)), self.COEF_DEF, self.COEF_BALL)
-        return tradDefenseur(I)
-
-############################################ STRATEGIES EQUILIBREES ##########################################
-
-# Stratégie - Passeur fou
-class CrazyPassStrategy(Strategy) :
-    # Init
-    def __init__(self, coefPass, coefBall, coefGoal):
-        Strategy.__init__(self, "Passeur Fou")
-        self.COEF_PASS = coefPass
-        self.COEF_BALL = coefBall
-        self.COEF_GOAL = coefGoal
-
-    # Calcul de stratégie
-    def compute_strategy(self, state, id_team, id_player):
-        I = ConditionCrazyPass(ComportementNaif(SuperState(state, id_team, id_player)), self.COEF_PASS, self.COEF_BALL, self.COEF_GOAL)
-        return crazyPasser(I)
+        I = ConditionDefenseur(ComportementNaif(SuperState(state,id_team,id_player), self.last_hit))
+        return defenseDT(I)
 
 ############################################ STRATEGIES OFFENSIVES ##########################################
 
@@ -57,6 +29,14 @@ class FonceurStrategy(Strategy):
     def compute_strategy(self,state,id_team,id_player):
         I = ConditionAttaque(ComportementNaif(SuperState(state,id_team,id_player)))
         return fonceur(I)
+
+class ForwardStrategy(Strategy):
+    def __init__(self, lastHit):
+        Strategy.__init__(self,"Attaquant")
+        self.last_hit = lastHit
+    def compute_strategy(self,state,id_team,id_player):
+        I = ConditionAttaque(ComportementNaif(SuperState(state,id_team,id_player), self.last_hit))
+        return forwardDT(I)
 
 class FonceurTestStrategy(Strategy):
     def __init__(self, strength=None,fn=None):

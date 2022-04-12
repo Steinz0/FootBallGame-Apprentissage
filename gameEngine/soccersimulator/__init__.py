@@ -7,7 +7,7 @@ from .matches import Score, SoccerTournament
 # from .gui import SimuGUI, show_simu, show_state, pyg_start, pyg_stop, pyglet
 from .challenges import *
 from . import  settings
-# from . import gitutils
+from . import gitutils
 from .arbres_utils import apprend_arbre,build_apprentissage,genere_dot
 import logging
 __version__ = '1.2018.02.01'

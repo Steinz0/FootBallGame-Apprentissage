@@ -12,9 +12,11 @@ let filename = 'file_data'
 const Application = PIXI.Application;
 
 const stadium = new Application({
+	forceCanvas: true,
 	width: 1200,
 	height: 700,
-	backgroundColor: 0xAAFFAA
+	radius: 10,
+	backgroundColor: 0xAAFFAA,
 })
 
 const graphics = new PIXI.Graphics();
@@ -44,7 +46,7 @@ graphics.lineTo(settings.FIELDWIDTH, settings.FIELDHEIGTH / 2 + settings.GOALHEI
 stadium.stage.addChild(graphics);
 
 // Adding to the window 
-document.body.appendChild(stadium.view)
+document.getElementById("mid-center").appendChild(stadium.view)
 
 stadium.loader.baseUrl = '/public/img'
 stadium.loader
@@ -65,11 +67,13 @@ deleteB.addEventListener("click", deleteGame);
 const submit = document.getElementsByClassName("submit-button")[0]; 
 submit.addEventListener("click", insertData);
 
-const testB = document.getElementsByClassName("test")[0]; 
-testB.addEventListener("click", getDataMatches);
-
-const fileB = document.getElementsByClassName("file-button")[0]; 
+const fileB = document.getElementsByClassName("file-button-show")[0]; 
 fileB.addEventListener("click", setFilename);
+
+const importantSnapshot = document.getElementsByClassName("button-important-snapshot")[0]; 
+importantSnapshot.addEventListener("click", getimportantSnapshot);
+
+
 
 function show(e) {
 	console.log(e.progress)
@@ -87,9 +91,10 @@ function doneLoading() {
 function createPlayer() {
 
 	// Blue team creation
+	let blueNames = ['Jeremy', 'Ethan']
 	for (let i=0; i<settings.NUMBEROFPLAYERSBYTEAM; i++){
 		// Player creation
-		let player = new Player('Blue', '1', 100 , 100 + (i*10), 'none', 'blue', stadium.loader.resources['blue'].texture)
+		let player = new Player(blueNames[i], '1', 100 , 100 + (i*10), 'none', 'Blue', stadium.loader.resources['blue'].texture)
 
 		allPlayers.push(player)
 		blueTeam.push(player)
@@ -97,11 +102,11 @@ function createPlayer() {
 		stadium.stage.addChild(player)
 		stadium.stage.addChild(player.directLine)
 	}
-
+	let redNames = ['Niko', 'Dan']
 	// Red team creation
 	for (let i=0; i<settings.NUMBEROFPLAYERSBYTEAM; i++){
 		// Player creation
-		let player = new Player('Red', '1', 200 , 200 + (i*10), 'none', 'red', stadium.loader.resources['red'].texture)
+		let player = new Player(redNames[i], '1', 200 , 200 + (i*10), 'none', 'Red', stadium.loader.resources['red'].texture)
 
 		allPlayers.push(player)
 		redTeam.push(player)
@@ -135,7 +140,6 @@ function drawLine(obj, x, y, vectx, vecty) {
 
 
 function setFilename() {
-	console.log(document.querySelector('#fname').innerHTML)
 	filename = document.querySelector('#fname').innerHTML
 }
 function setSituation() {
@@ -151,7 +155,6 @@ function setSituation() {
             if(rawFile.status === 200 || rawFile.status == 0)
             {
                 let allText = rawFile.responseText.split("\n")			
-				// let checker = allText[0].split("\r")[0]
 				let coords = allText.slice(1, allText.length)
 				setValues(coords[x])
             }
@@ -167,11 +170,9 @@ function onOffPlay() {
 	if (play){
 		play = false;
 		breplay.innerText = "PLAY";
-		console.log('play')
 	}else{
 		play = true;
 		breplay.innerText = "PAUSE";
-		console.log('pause')
 	}
 }
 function playGameFile() {
@@ -185,10 +186,9 @@ function playGameFile() {
 function setValues(coords) {
 	if (coords != undefined){
 		let c = coords.split(" ")
-		
-		score = [c[1], c[0]]
-		document.getElementById("blueTeamScore").innerHTML = c[1]
+		score = [c[0], c[1]]
 		document.getElementById("redTeamScore").innerHTML = c[0]
+		document.getElementById("blueTeamScore").innerHTML = c[1]
 
 		let ball_c = c.slice(2, 6)
 		let reds_c = c.slice(6, 6 + redTeam.length*4)
@@ -213,24 +213,6 @@ function setValues(coords) {
 	}
 }
 
-// function arrayToOption(arr, selectId) {
-// 	(e1 => (
-// 		(e1 = document.querySelector('#' + selectId)),
-// 		(e1.innerHTML = '')
-// 		(e1.innerHTML += arr.map(item => `<option> ${item} </option>`).join(''))
-// 	))();
-// }
-
-function arrayToOption(arr, selectId) {
-	(e1 => (
-		(e1 = document.querySelector('#' + selectId)),
-		(e1.innerHTML = '')
-		(e1.innerHTML += arr.map(item => `<tr> <td>${item}</td></tr>`).join(''))
-		(e1.rows.forEach)
-	))();
-	console.log('HERE')
-}
-
 async function getDataMatches(){
     await axios.get('http://localhost:3000/db')
     .then((data) => {
@@ -238,7 +220,6 @@ async function getDataMatches(){
 		let table = document.querySelector('#table'), rIndex;
 		table.innerHTML = ''
 		table.innerHTML += data.data.msg.map(item => `<tr> <td>${item}</td></tr>`).join('')
-      	console.log(table)
 
 		  for (let i=0; i< table.rows.length; i++){
 			table.rows[i].onclick = function() {
@@ -256,27 +237,22 @@ async function deleteGame(){
 	let fileID = document.querySelector("#fname").innerHTML
     await axios.delete('http://localhost:3000/deleteGame/'+fileID)
     .then((data) => {
-		console.log(data)
+        window.location.reload()
 	})
     .catch((err) => {
       	console.log(err)
     })
 }
 
-async function DeleteFile(){
-	
-	
-}
-
 async function insertData(userId){
-	const ballCoord = [ball.position.x, ball.position.y]
+	const ballCoord = [parseFloat(ball.position.x), parseFloat(ball.position.y)]
 	const redCoords = []
 	const blueCoords = []
 	for (let i=0; i<redTeam.length; i++) {
-		redCoords.push([redTeam[i].position.x, redTeam[i].position.y])
-		blueCoords.push([blueTeam[i].position.x, blueTeam[i].position.y])
+		redCoords.push([parseFloat(redTeam[i].position.x), parseFloat(redTeam[i].position.y)])
+		blueCoords.push([parseFloat(blueTeam[i].position.x), parseFloat(blueTeam[i].position.y)])
 	}
-	const actualPlayer = [document.querySelector('#x').innerHTML, document.querySelector('#y').innerHTML]
+	const actualPlayer = [parseFloat(document.querySelector('#x').innerHTML), parseFloat(document.querySelector('#y').innerHTML)]
 	const order = document.querySelector('#choose').value;
 
 	const data = {
@@ -284,11 +260,10 @@ async function insertData(userId){
         ballCoord: ballCoord,
         redCoords: redCoords,
         blueCoords: redCoords,
-        score: score,
+        score: [parseInt(score[0]), parseInt(score[1])],
         actualPlayer: actualPlayer,
         order: order
     }
-	console.log(data)
 	await axios.post('http://localhost:3000/db', data)
     .then((data) => {
       console.log(data)
@@ -296,4 +271,11 @@ async function insertData(userId){
     .catch((err) => {
       console.log(err)
     })
+}
+
+function getimportantSnapshot(){
+	let maxRange = parseInt(document.getElementsByClassName("slider").myRange.max)
+	let randomValue = Math.floor(Math.random() * maxRange)
+	console.log(randomValue)
+	document.getElementsByClassName("slider").myRange.value = randomValue
 }

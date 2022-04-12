@@ -188,7 +188,7 @@
       <div class="navbar">
         <ul>
             <li><a href="/">Accueil</a></li>
-            <li><a href="./rules">Rules</a></li>
+            <li><a href="https://github.com/Steinz0/FootballGame-ML/blob/main/Rules.md">Rules</a></li>
             <li><a href="https://github.com/Steinz0/FootBallGame-Apprentissage">Documentation</a></li>
         </ul>
       </div>
@@ -197,7 +197,7 @@
           <%= messages.error %>
         <% } %>
         <form action="/register" method="POST">
-          <h3>Register Here</h3>
+          <h3>Register</h3>
 
           <label for="name">Name</label>
           <input type="text" placeholder="Name" id="name" name="name" required>
@@ -209,8 +209,9 @@
           <input type="password" placeholder="Password" id="password" name="password" required>
 
           <button type="submit"><span></span>Register</button>
-        </form>        
-      </div>
+          <button type="button" onclick="window.location.href = './login';"><span></span>Login</button>
+    </form>        
+    </div>
     </div>
 </body>
 </html>

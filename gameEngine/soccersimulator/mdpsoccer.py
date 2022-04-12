@@ -191,6 +191,7 @@ class SoccerState(object):
     def __init__(self,states=None,ball=None,**kwargs):
         self.states = states or dict()
         self.ball = ball or Ball()
+        self.init_states = dict() # Dictionnaire des positions initiales, il est rempli à la première itération de jeu
         self.strategies = kwargs.pop('strategies',dict())
         self.score = kwargs.pop('score', {1: 0, 2: 0})
         self.step = kwargs.pop('step', 0)
@@ -210,6 +211,7 @@ class SoccerState(object):
                 strategies=dict_to_json( self.strategies),
                 ball=self.ball,score=dict_to_json(self.score),step=self.step,
                 max_steps=self.max_steps,goal=self.goal)
+                
     def player_state(self, id_team, id_player):
         """ renvoie la configuration du joueur
         :param id_team: numero de la team du joueur
@@ -217,6 +219,14 @@ class SoccerState(object):
         :return:
         """
         return self.states[(id_team, id_player)]
+
+    def player_init_state(self, id_team, id_player):
+        """ renvoie la configuration du joueur
+        :param id_team: numero de la team du joueur
+        :param id_player: numero du joueur
+        :return:
+        """
+        return self.init_states[(id_team, id_player)]
 
     @property
     def players(self):
@@ -340,7 +350,38 @@ class SoccerState(object):
             self.states[(2, 1)] = PlayerState(position=Vector2D(rows[3], quarters[2]))
             self.states[(2, 2)] = PlayerState(position=Vector2D(rows[2], quarters[0]))
             self.states[(2, 3)] = PlayerState(position=Vector2D(rows[2], quarters[2]))
+
+        if nb_players_1 == 1:
+            self.init_states[(1, 0)] = Vector2D(rows[0], quarters[1])
+        if nb_players_2 == 1:
+            self.init_states[(2, 0)] = Vector2D(rows[3], quarters[1])
+        if nb_players_1 == 2:
+            self.init_states[(1, 0)] = Vector2D(rows[0], quarters[0])
+            self.init_states[(1, 1)] = Vector2D(rows[0], quarters[2])
+        if nb_players_2 == 2:
+            self.init_states[(2, 0)] = Vector2D(rows[3], quarters[0])
+            self.init_states[(2, 1)] = Vector2D(rows[3], quarters[2])
+        if nb_players_1 == 3:
+            self.init_states[(1, 0)] = Vector2D(rows[0], quarters[1])
+            self.init_states[(1, 1)] = Vector2D(rows[0], quarters[0])
+            self.init_states[(1, 2)] = Vector2D(rows[0], quarters[2])
+        if nb_players_2 == 3:
+            self.init_states[(2, 0)] = Vector2D(rows[3], quarters[1])
+            self.init_states[(2, 1)] = Vector2D(rows[3], quarters[0])
+            self.init_states[(2, 2)] = Vector2D(rows[3], quarters[2])
+        if nb_players_1 == 4:
+            self.init_states[(1, 0)] = Vector2D(rows[0], quarters[0])
+            self.init_states[(1, 1)] = Vector2D(rows[0], quarters[2])
+            self.init_states[(1, 2)] = Vector2D(rows[1], quarters[0])
+            self.init_states[(1, 3)] = Vector2D(rows[1], quarters[2])
+        if nb_players_2 == 4:
+            self.init_states[(2, 0)] = Vector2D(rows[3], quarters[0])
+            self.init_states[(2, 1)] = Vector2D(rows[3], quarters[2])
+            self.init_states[(2, 2)] = Vector2D(rows[2], quarters[0])
+            self.init_states[(2, 3)] = Vector2D(rows[2], quarters[2])
+
         self.ball = Ball(Vector2D(settings.GAME_WIDTH / 2, settings.GAME_HEIGHT / 2),Vector2D())
+
         self.goal = 0
 
 
@@ -437,12 +478,13 @@ listPos = []
 
 
 class Simulation(object):
-    def __init__(self,team1=None,team2=None, max_steps = settings.MAX_GAME_STEPS,initial_state=None,filename=None,**kwargs):
+    def __init__(self, team1=None,team2=None, max_steps = settings.MAX_GAME_STEPS,initial_state=None,filename=None, lasthit=None, **kwargs):
         self.filename = filename
         self.team1, self.team2 = team1 or SoccerTeam(),team2 or SoccerTeam()
         self.initial_state = initial_state or  SoccerState.create_initial_state(self.team1.nb_players,self.team2.nb_players,max_steps)
         self.state = self.initial_state.copy()
         self.max_steps = max_steps
+        self.last_hit = lasthit # Classe last hit - Pour controler qui a touche la balle en dernier
         self.state.max_steps = self.initial_state.max_steps =  max_steps
         self.listeners = SoccerEvents()
         self._thread = None
@@ -550,6 +592,8 @@ class Simulation(object):
         self.listeners.begin_round(self.team1,self.team2,self.state.copy())
     def end_round(self):
         self.listeners.end_round(self.team1, self.team2, self.state.copy())
+        if (self.last_hit) :
+            self.last_hit.reset()
         if not self.stop():
             self.begin_round()
     def begin_match(self):

@@ -1,25 +1,24 @@
 from typing_extensions import Self
-from .tools import SuperState, Comportement, ProxyObj
+from .tools import SuperState, Comportement, ProxyObj, get_random_vec
 from soccersimulator import Vector2D,SoccerAction
-from soccersimulator.settings import PLAYERS_PER_TEAM, maxPlayerShoot, maxPlayerSpeed,maxPlayerAcceleration
+from soccersimulator.settings import maxPlayerShoot, maxPlayerSpeed, maxPlayerAcceleration
 
 ############################################ CLASSE COMPORTEMENT RACINE ##########################################
 
 class ComportementNaif(Comportement):
     # Coefficients d'actions
     RUN_COEF = maxPlayerAcceleration
-    GO_COEF = maxPlayerAcceleration / 3.
+    GO_COEF = maxPlayerAcceleration / 5.
 
-    SHOOT_COEF = maxPlayerShoot
-    DRIBBLE_COEF = maxPlayerShoot / 3.
-    THROW_COEF = maxPlayerShoot
+    SHOOT_COEF = maxPlayerShoot * 2
+    DRIBBLE_COEF = maxPlayerShoot
+    THROW_COEF = maxPlayerShoot * 4
     PASS_COEF = maxPlayerShoot / 2.
 
-    # Coefficients de situation
-
     # Init
-    def __init__(self,state):
+    def __init__(self,state, lastHit):
         super(ComportementNaif,self).__init__(state)
+        self.last_hit = lastHit
 
     # Action - Courir vers
     def run(self,p):
@@ -40,8 +39,12 @@ class ComportementNaif(Comportement):
     # Action - Dégager la balle
     def degage(self):
         if self.can_kick:
-            return SoccerAction(shoot=(self.his_goal-self.ball_p).normalize()*self.THROW_COEF)
+            return SoccerAction(shoot=(self.ball_p - self.my_goal).normalize()*self.THROW_COEF)
         return SoccerAction()
+
+    # Action - Dribbler vers les cages
+    def dribble(self) :
+        return SoccerAction(acceleration=(self.his_goal - self.ball_p).normalize()*self.GO_COEF, shoot=(self.his_goal - self.ball_p).normalize()*self.DRIBBLE_COEF)
 
     # Action - Tirer la balle dans une direction précision
     def kick(self, p) :
@@ -55,9 +58,10 @@ class ComportementNaif(Comportement):
         # Variables de recherche
         markDistance = 1000000
         markID = 0
+        nbAdv = (len([i for i in self.players if (i[0] == self.his_team)]))
 
         # On itère sur les joueurs adverses
-        for id in range(PLAYERS_PER_TEAM) :
+        for id in range(nbAdv) :
             dist = self.me.distance(self.player_state(self.his_team, id).position)
             if (dist < markDistance) :
                 markDistance = dist
@@ -79,9 +83,10 @@ class ComportementNaif(Comportement):
         tmDistance = 1000000
         tmID = 0
         (idT , idP) = self.key # Indice à ne pas étudier (il s'agit du joueur lui-même)
+        nbTeam = (len([i for i in self.players if (i[0] == idT)]))
 
         # On itère sur les joueurs de l'équipe
-        for id in range(PLAYERS_PER_TEAM) :
+        for id in range(nbTeam) :
             if (id != idP) :
                 dist = self.me.distance(self.player_state(idT, idP).position)
                 if (dist < tmDistance) :
@@ -96,9 +101,10 @@ class ComportementNaif(Comportement):
         # Variables de recherche
         advDistance = 1000000
         advID = 0
+        nbAdv = (len([i for i in self.players if (i[0] == self.his_team)]))
 
         # On itère sur les joueurs adverses
-        for id in range(PLAYERS_PER_TEAM) :
+        for id in range(nbAdv) :
             dist = self.me.distance(self.player_state(self.his_team, id).position)
             if (dist < advDistance) :
                 advDistance = dist
@@ -112,28 +118,71 @@ class ComportementNaif(Comportement):
         # Variables de recherche
         advDistance = 1000000
         advID = 0
+        nbAdv = (len([i for i in self.players if (i[0] == self.his_team)]))
 
         # On itère sur les joueurs adverses
-        for id in range(PLAYERS_PER_TEAM) :
+        for id in range(nbAdv) :
             dist = self.ball_p.distance(self.player_state(self.his_team, id).position)
             if (dist < advDistance) :
                 advDistance = dist
                 advID = id
 
-        # On se déplace vers le joueur adverse ciblé
+        # On retourne la position du joueur adverse ciblé
         return self.player_state(self.his_team, advID).position
+
+    # Recherche - Joueur adverse plus proche de la balle que moi
+    def advCloserThanMe(self) :
+        advPos = self.advClosestBall()
+        return self.ball_p.distance(advPos) > self.distance(self.ball_p)
+
+    @property
+    def no_possession(self) :
+        # Aucune équipe n'a la possesion de la balle
+        return self.last_hit.LH == (0,0)
+    @property
+    def team_possession(self) :
+        # L'équipe a la balle ou non
+        return self.last_hit.LH[0] == self.key[0]
+
+    # Mise à jour - Dernier joueur ayant touché la balle
+    def updateLastHit(self) :
+        self.last_hit.update(self.key)
 
 ############################################ CONDITIONS DEFENSIVES ##########################################
 
 # Condition - Defenseur par défaut
 class ConditionDefenseur(ProxyObj):
-    COEF_DEF = 0.3 
+    COEF_DEF = 0.2
+    COEF_WORRY = 0.05
+    COEF_BALL = 0.2
     def __init__(self,state):
         super(ConditionDefenseur,self).__init__(state)
     
     # Status - Est en défense
     def is_defense(self):
         return self.ball_p.distance(self.my_goal)<self.COEF_DEF*self.width
+        
+    # Status - Proche de la balle
+    def close_ball(self):
+        return self.me.distance(self.ball_p)<self.COEF_BALL*self.width
+
+    # Recherche - Positionner entre les cages et la balle (à mi-distance)
+    def defensivePos(self) :
+        initPos = self.getInitPos()
+        tmp = (self.ball_p-self.my_goal).normalize()*self.width*0.1 + self.my_goal
+        return Vector2D(x=((tmp.x + initPos.x) / 2.), y=((tmp.y + initPos.y) / 2.))
+
+    # Recherche - Adversaire à proximité (en fonction de la crainte)
+    def advNearMe(self) :
+        nbAdv = (len([i for i in self.players if (i[0] == self.his_team)]))
+        for id in range(nbAdv) :
+            if (self.me.distance(self.player_state(self.his_team, id).position) < self.COEF_WORRY*self.width) :
+                return True
+        return False
+
+    # Status - Position initiale du joueur
+    def getInitPos(self) :
+        return self.player_init_state(self.key[0], self.key[1])
 
 # Action - Defenseur par défaut
 def defenseur(I):
@@ -141,66 +190,67 @@ def defenseur(I):
         return I.degage()+I.run(I.ball_p)
     return I.go((I.ball_p-I.my_goal).normalize()*I.width*0.1+I.my_goal)
 
-# Condition - Defenseur Traditionnel
-class ConditionTraditionalDefender(ProxyObj) :
-    def __init__(self, state, coefDef, coefBall):
-        super(ConditionTraditionalDefender,self).__init__(state)
-        self.COEF_DEF = coefDef
-        self.COEF_BALL = coefBall
-
-    # Status - Est en défense
-    def is_defense(self):
-        return self.ball_p.distance(self.my_goal)<self.COEF_DEF*self.width
-
-    # Status - Est proche de la balle
-    def close_ball(self):
-        return self.me.distance(self.ball_p)<self.COEF_BALL*self.width
-
 # Action - Défenseur traditionnel
-def tradDefenseur(I) :
+def defenseDT(I) :
+    # Mise à jour de la position initiale
+    # I.updateInitPos()
+
+    # Action prioritaire - Dégager la balle si elle est trop proche des cages
     if I.is_defense() :
+        return I.degage()+I.run(I.ball_p)
+
+    # No team in possession ?
+    if I.no_possession :
+        # Is the player near the ball ?
         if I.close_ball() :
-            return I.degage() + I.run(I.ball_p) # On court vers la balle la dégager le plus fort possible
-        else :
-            return I.go((I.ball_p-I.my_goal).normalize()*I.width*0.1+I.my_goal)
-    else :
-        return I.run(I.advClosestSelf())
-
-############################################ CONDITIONS MILIEU ##############################################
-
-# Condition - Passeur fou
-class ConditionCrazyPass(ProxyObj) :
-    def __init__(self, state, coefPass, coefBall, coefGoal) :
-        super(ConditionCrazyPass,self).__init__(state)
-        self.COEF_PASS = coefPass
-        self.COEF_BALL = coefBall
-        self.COEF_GOAL = coefGoal
-
-    # Status - Est proche d'un coéquipier
-    def close_teammate(self) :
-        return self.me.distance(self.findClosestTeammate()) < self.COEF_PASS * self.width
-
-    # Status - Est proche de la balle
-    def close_ball(self):
-        return self.me.distance(self.ball_p)<self.COEF_BALL*self.width
-
-# Action
-def crazyPasser(I) :
-    if I.close_ball() :
-        if I.can_kick :
-            if I.close_teammate() :
-                return I.kick(I.findClosestTeammate())
+            # Can the player kick the ball ?
+            if I.can_kick :
+                I.updateLastHit()
+                return I.degage()
             else :
-                if I.close_goal() :
-                    return I.degage()
-                else :
-                    return I.shoot()
+                return I.run(I.ball_p)
         else :
-            return I.run(I.ball_p)
+            return I.run(I.defensivePos())
     else :
-        return I.run(I.ball_p)
+        # Is the player's team in possession ?
+        if I.team_possession :
+            # Is the player near the ball ?
+            if I.close_ball() :
+                # Can the player kick the ball ?
+                if I.can_kick :
+                    I.updateLastHit()
+                    # Is there an opponent near me ?
+                    if I.advNearMe() :
+                        return I.degage()
+                    else :
+                        return I.dribble()
+                else :
+                    return I.run(I.ball_p)
+            else :
+                return I.run(I.defensivePos())
+        else :
+            # Is the ball near the player ?
+            if I.close_ball() :
+                # Can the player kick the ball ?
+                if I.can_kick :
+                    I.updateLastHit()
+                    # Is there an opponent closer near me ?
+                    if I.advNearMe() :
+                        return I.degage()
+                    else :
+                        return I.dribble()
+                else :
+                    # Is there an opponent closer to me ?
+                    if I.advCloserThanMe() :
+                        return I.run(I.defensivePos())
+                    else :
+                        if I.advNearMe() :
+                            return I.run(I.defensivePos())
+                        else :
+                            return I.run(I.ball_p)
+            else :
+                return I.go(I.defensivePos())
 
-            
 
 ############################################ CONDITIONS OFFENSIVES ##########################################
 
@@ -214,6 +264,49 @@ class ConditionAttaque(ProxyObj):
         return self.me.distance(self.his_goal)<self.COEF_SHOOT*self.width
     def close_ball(self):
         return self.me.distance(self.ball_p)<self.COEF_BALL*self.width
+ 
+# Action - Attaquant traditionnel
+def forwardDT(I) :
+    # Mise à jour de la position initiale
+    #I.updateInitPos()
+
+    # No team in possession ?
+    if I.no_possession :
+        # Can the player kick the ball ?
+        if I.can_kick :
+            I.updateLastHit()
+            # Is the player near the goal ?
+            if I.close_goal() :
+                return I.shoot()
+            else :
+                return I.dribble()
+        else :
+            return I.run(I.ball_p)
+    else :
+        # Team in possesion ?
+        if I.team_possession :
+            # Ball near the player ?
+            if I.close_ball() :
+                # Can the player kick the ball ?
+                if I.can_kick :
+                    I.updateLastHit()
+                    # Is the player near the goal ?
+                    if I.close_goal() :
+                        return I.shoot()
+                    else :
+                        return I.dribble()
+                else :
+                    return I.run(I.ball_p)
+            else :
+                return I.run(Vector2D() - I.advClosestSelf())
+        else :
+            # Can the player kick the ball ?
+            if I.can_kick :
+                I.updateLastHit()
+                return I.degage()
+            else :
+                return I.run(I.ball_p)
+
 
 # Action de fonceur par défaut
 def fonceur(I) :
@@ -224,7 +317,10 @@ def fonceur(I) :
             return I.run(I.ball_p)
     else :
         if I.close_goal() :
+            I.updLastHit()
             return I.shoot()
-    return I.degage()
+    I.updLastHit()
+    if (I.advCloserThanMe()) :
+        return I.degage()
 
 

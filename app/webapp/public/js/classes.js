@@ -275,8 +275,9 @@ export class SoccerAction {
 }
 
 function clickPlayer() {
-    document.getElementById('forms').style.display = "block";
-    document.getElementById('name').innerHTML = this.name
-    document.getElementById('x').innerHTML = this.x
-    document.getElementById('y').innerHTML = this.y
+    document.getElementById('form-order').style.visibility = "visible";
+    document.getElementById('name').innerHTML = "Name : " + this.fname
+    document.getElementById('Team').innerHTML = "Team : " + this.team
+    document.getElementById('x').innerHTML = "X : " + this.x
+    document.getElementById('y').innerHTML = "Y : " + this.y
 }
