@@ -237,7 +237,7 @@ async function deleteGame(){
 	let fileID = document.querySelector("#fname").innerHTML
     await axios.delete('http://localhost:3000/deleteGame/'+fileID)
     .then((data) => {
-		console.log(data)
+        window.location.reload()
 	})
     .catch((err) => {
       	console.log(err)
@@ -245,14 +245,14 @@ async function deleteGame(){
 }
 
 async function insertData(userId){
-	const ballCoord = [ball.position.x, ball.position.y]
+	const ballCoord = [parseFloat(ball.position.x), parseFloat(ball.position.y)]
 	const redCoords = []
 	const blueCoords = []
 	for (let i=0; i<redTeam.length; i++) {
-		redCoords.push([redTeam[i].position.x, redTeam[i].position.y])
-		blueCoords.push([blueTeam[i].position.x, blueTeam[i].position.y])
+		redCoords.push([parseFloat(redTeam[i].position.x), parseFloat(redTeam[i].position.y)])
+		blueCoords.push([parseFloat(blueTeam[i].position.x), parseFloat(blueTeam[i].position.y)])
 	}
-	const actualPlayer = [document.querySelector('#x').innerHTML, document.querySelector('#y').innerHTML]
+	const actualPlayer = [parseFloat(document.querySelector('#x').innerHTML), parseFloat(document.querySelector('#y').innerHTML)]
 	const order = document.querySelector('#choose').value;
 
 	const data = {
@@ -260,7 +260,7 @@ async function insertData(userId){
         ballCoord: ballCoord,
         redCoords: redCoords,
         blueCoords: redCoords,
-        score: score,
+        score: [parseInt(score[0]), parseInt(score[1])],
         actualPlayer: actualPlayer,
         order: order
     }

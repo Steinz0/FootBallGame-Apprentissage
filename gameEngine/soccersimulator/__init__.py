@@ -4,7 +4,7 @@ from .strategies import Strategy,  KeyboardStrategy, DTreeStrategy
 from .mdpsoccer import SoccerAction, Ball, PlayerState,SoccerState
 from .mdpsoccer import  Player, SoccerTeam, Simulation
 from .matches import Score, SoccerTournament
-from .gui import SimuGUI, show_simu, show_state, pyg_start, pyg_stop, pyglet
+# from .gui import SimuGUI, show_simu, show_state, pyg_start, pyg_stop, pyglet
 from .challenges import *
 from . import  settings
 from . import gitutils
