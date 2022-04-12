@@ -50,19 +50,6 @@ class SuperState(ProxyObj):
     @property
     def goal_radius(self):
         return GAME_GOAL_HEIGHT/2.
-    # Fonctions ajoutées
-    @property
-    def no_possession(self) :
-        # Aucune équipe n'a la possesion de la balle
-        return self.last_hit[0] == 0
-    @property
-    def team_possession(self) :
-        # L'équipe a la balle ou non
-        return self.last_hit[0] == self.key[0]
-    @property
-    def updateLH(self) :
-        # Mise à jour du dernier joueur ayant tiré
-        self.last_hit = self.key
 
     def distance(self,p):
         return self.me.distance(p)

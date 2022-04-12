@@ -13,11 +13,12 @@ class RandomStrategy(Strategy):
 
 # Stratégie - Défenseur par défaut
 class DefenseurStrategy(Strategy):
-    def __init__(self):
+    def __init__(self, lastHit):
         Strategy.__init__(self, "Defenseur")
+        self.last_hit = lastHit
     def compute_strategy(self,state,id_team,id_player):
-        I = ConditionDefenseur(ComportementNaif(SuperState(state,id_team,id_player)))
-        return defenseur(I)
+        I = ConditionDefenseur(ComportementNaif(SuperState(state,id_team,id_player), self.last_hit))
+        return defenseDT(I)
 
 ############################################ STRATEGIES OFFENSIVES ##########################################
 
@@ -30,10 +31,11 @@ class FonceurStrategy(Strategy):
         return fonceur(I)
 
 class ForwardStrategy(Strategy):
-    def __init__(self):
+    def __init__(self, lastHit):
         Strategy.__init__(self,"Attaquant")
+        self.last_hit = lastHit
     def compute_strategy(self,state,id_team,id_player):
-        I = ConditionAttaque(ComportementNaif(SuperState(state,id_team,id_player)))
+        I = ConditionAttaque(ComportementNaif(SuperState(state,id_team,id_player), self.last_hit))
         return forwardDT(I)
 
 class FonceurTestStrategy(Strategy):

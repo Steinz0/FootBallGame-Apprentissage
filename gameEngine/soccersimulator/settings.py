@@ -6,12 +6,12 @@ GAME_GOAL_HEIGHT = 140
 PLAYER_RADIUS = 16
 BALL_RADIUS = 16
 
-maxPlayerSpeed = 10
-maxPlayerAcceleration = 0.2
+maxPlayerSpeed = 10.
+maxPlayerAcceleration = 1.5
 playerBrackConstant = 0.1
 nbWithoutShoot = 10
-maxPlayerShoot = 6.
-maxBallAcceleration = 6.
+maxPlayerShoot = 12.
+maxBallAcceleration = 12.
 shootRandomAngle = 0.2
 ballBrakeConstant = 0.06
 ballBrakeSquare = 0.01
