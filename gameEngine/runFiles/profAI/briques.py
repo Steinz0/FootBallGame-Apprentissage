@@ -152,8 +152,8 @@ class ComportementNaif(Comportement):
 
 # Condition - Defenseur par défaut
 class ConditionDefenseur(ProxyObj):
-    COEF_DEF = 0.3 
-    COEF_WORRY = 3.
+    COEF_DEF = 0.2
+    COEF_WORRY = 0.05
     COEF_BALL = 0.2
     def __init__(self,state):
         super(ConditionDefenseur,self).__init__(state)
@@ -194,6 +194,10 @@ def defenseur(I):
 def defenseDT(I) :
     # Mise à jour de la position initiale
     # I.updateInitPos()
+
+    # Action prioritaire - Dégager la balle si elle est trop proche des cages
+    if I.is_defense() :
+        return I.degage()+I.run(I.ball_p)
 
     # No team in possession ?
     if I.no_possession :

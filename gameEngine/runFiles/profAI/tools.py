@@ -1,5 +1,5 @@
 from soccersimulator import Vector2D, SoccerAction
-from soccersimulator.settings import GAME_GOAL_HEIGHT,GAME_HEIGHT, GAME_WIDTH,BALL_RADIUS,PLAYER_RADIUS
+from soccersimulator.settings import GAME_GOAL_HEIGHT,GAME_HEIGHT, GAME_WIDTH,BALL_RADIUS,PLAYER_RADIUS, MAX_BALL_KICK_LIMIT
 
 def get_random_vec(factor=1):
     return Vector2D.create_random(-1 * factor,1 * factor)
@@ -37,7 +37,9 @@ class SuperState(ProxyObj):
         return self.ball.position
     @property
     def can_kick(self):
-        return self.distance(self.ball_p)<(PLAYER_RADIUS+BALL_RADIUS)
+        if (self.ball.vitesse.norm < MAX_BALL_KICK_LIMIT) :
+            return (self.distance(self.ball_p) < (PLAYER_RADIUS+BALL_RADIUS))
+        return False
     @property
     def width(self):
         return GAME_WIDTH

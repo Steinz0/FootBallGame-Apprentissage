@@ -11,7 +11,6 @@ class LastHit() :
     def update(self, key) :
         self.LH = key
     def reset(self) :
-        print("HEllo reset")
         self.LH = (0,0)
 
 # celery_app = Celery('tasks', backend='amqp://guest:guest@rabbit:5672', broker='amqp://guest:guest@rabbit:5672')
@@ -44,23 +43,23 @@ class LastHit() :
 
 # create_match()
 # Match test pour les strategies
-max_steps=100
+max_steps=1000
 lh = LastHit()
 
 # Création Equipe 1
 thon = SoccerTeam(name="Red Team")
-# thon.add("PyPlayer",st.DefenseurStrategy(lh)) #Strategie qui ne fait rien
-# thon.add("PyPlayer",st.DefenseurStrategy(lh)) #Strategie qui ne fait rien
+thon.add("PyPlayer",st.DefenseurStrategy(lh)) #Strategie qui ne fait rien
+thon.add("PyPlayer",st.DefenseurStrategy(lh)) #Strategie qui ne fait rien
 # thon.add("PyPlayer",st.ForwardStrategy(lh)) #Strategie qui fonce
-thon.add("PyPlayer",st.ForwardStrategy(lh)) #Strategie qui fonce
+# thon.add("PyPlayer",st.ForwardStrategy(lh)) #Strategie qui fonce
 
 
 # Création Equipe 2
 thon2 = SoccerTeam(name="Blue Team")
-thon2.add("PyPlayer",st.DefenseurStrategy(lh)) #Strategie qui ne fait rien
+# thon2.add("PyPlayer",st.DefenseurStrategy(lh)) #Strategie qui ne fait rien
 # thon2.add("PyPlayer",st.DefenseurStrategy(lh)) #Strategie qui ne fait rien
 # thon2.add("PyPlayer",st.ForwardStrategy(lh)) #Strategie qui fonce
-# thon2.add("PyPlayer",st.ForwardStrategy(lh)) #Strategie qui ne fait rien
+thon2.add("PyPlayer",st.ForwardStrategy(lh)) #Strategie qui ne fait rien
 
 #Creation d'une partie
 simu = Simulation(thon, thon2, max_steps=max_steps, lasthit=lh)
