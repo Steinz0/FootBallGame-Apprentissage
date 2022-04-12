@@ -3,7 +3,8 @@
 var fs                   = require('fs');
 var path                 = require("path");
 var cors                 = require('cors');
-
+var JSZip                = require("jszip");
+var FileSaver            = require('file-saver');
 const express            = require('express');
 
 const celery             = require('celery-node');
@@ -251,15 +252,31 @@ app
   })
   
 app.get('/admin', async (req, res) => {
-  let user = await usersDB.getAdmin()
-  console.log(user[0]._id)
-  console.log(req.session.passport.user)
-  if (req.session.passport.user == user[0]._id) {
-    res.sendFile(get_path("admin.html"));
-  }else{
-    res.redirect('/')
-  }
+  downloadLogs();
 });
+
+async function readTextFile(filename) {
+  try {
+    const data = fs.readFileSync(filename, 'utf8')
+    return data
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+async function downloadLogs(){
+  let zip = new JSZip();
+
+  const filesLogs = fromDir(path.join(__dirname, "../logsGames/"),'.txt');
+  filesLogs.forEach(e => {
+    let data = readTextFile(e)
+    zip.file(e.split('\\').at(-1), data)
+  });
+  zip.generateAsync({type:'nodebuffer'})
+  .then(function(content) {
+    FileSaver.saveAs(content, "download.zip")
+  })
+}
 
 // Start the server
 

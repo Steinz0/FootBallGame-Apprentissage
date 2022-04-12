@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="public/css/index.css">
 </head>
 <body>
-
+  
   <div class="navbar">
     <ul>
         <li><a href="./">Home</a></li>
@@ -28,14 +28,17 @@
   </div>
   
   <div class="score">
-    <p style="font-size: 1em;">Red Team <span id="redTeamScore"></span> - <span id="blueTeamScore"></span> Blue Team</p>
+    <div class="redScore">Red Team</div>
+    <div class="blueScore">Blue Team</div>
+    <span id="redTeamScore"></span>
+    <span id="blueTeamScore"></span>
   </div>
 
 
   <div class="mid" id="mid">
     <div class="mid-left">
       <div class="files-forms">
-        <div id='contain-table' style= "height: 120px; width: auto; overflow:auto;">
+        <div id='contain-table' style= "height: 120px; width: 260px; overflow:auto;">
           <table id="table" border="1">
           </table>
         </div>
@@ -65,7 +68,7 @@
           </div>
         </div>
         <div class="buttons-manage-AI">
-          <button id='button-train-ai' class="button-train-ai" onclick="console.log('TRAIN AI')">TRAIN YOUR AI</button>
+          <button id='button-train-ai' class="button-train-ai" onclick="console.log('TRAIN AI')" disabled>TRAIN YOUR AI</button>
           <button class="manage-AI-button">Submit</button>
         </div>
       </div>
@@ -79,18 +82,13 @@
         </div>
 
         <div class="button-manage">
+          <button id='bnew-game' class="bnew-game" onclick="window.location.href='./create'">NEW GAME</button>
+          <div class="container">
+            <i class="fas fa-play"></i>
+          </div>  
+          <button id='breplay' class="breplay">PLAY</button>
 
-          <div class="new-game">
-            <button id='bnew-game' class="bnew-game" onclick="window.location.href='./create'">NEW GAME</button>
-          </div>
-
-          <div class="play">
-            <button id='breplay' class="breplay">PLAY</button>
-          </div>
-
-          <div class="important-snapshot">
-            <button id='button-important-snapshot' class="button-important-snapshot" onclick="console.log('TEST')">IMPORTANT SNAPSHOT</button>
-          </div>
+          <button id='button-important-snapshot' class="button-important-snapshot">IMPORTANT SNAPSHOT</button>
         </div>
       </div>
     </div>
@@ -98,13 +96,18 @@
 
     <div class="mid-right">
       <div class='form-order' id='form-order'>
-        <button class="close" id="close" onclick="document.getElementById('form-order').style.visibility = 'hidden'">CLOSE</button>
         <div class='forms' id="forms">
-          <div id="name">name</div>
-          <div id="x">x</div>
-          <div id="y">y</div>
-          <div class="choose-order">
-            <label for="choose">Ordre</label>
+          <button class="close" id="close" onclick="document.getElementById('form-order').style.visibility = 'hidden'">X</button>
+          <div class="infos-title">Infos Player</div>
+          <ul>
+            <li id="name">Name</li>
+            <li id="Team">Team</li>
+            <li id="x">X</li>
+            <li id="y">Y</li>
+          </ul>
+            <hr class="line">
+            <div class="choose-order">
+            <label for="choose" class="label-choose">Order</label>
             <select id="choose" class="choose">
               <option value="runAdvGoal">Courir - Cages adverses</option>
               <option value="runTeamGoal">Courir - Cages équipe</option>
@@ -125,105 +128,13 @@
               <option value="dribbleTeammate">Dribbler - Coéquipier proche</option>
               <option value="dribbleAway">Dribbler - Loin des adversaires</option>
             </select>
+            <button class="submit-button">Send Order</button>
           </div>
         </div>
-        <button class="submit-button">Submit</button>
       </div>
     </div>
 
-    <div class="firework" id="firework-left1">
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-    </div>
 
-    <div class="firework" id="firework-left2">
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-    </div>
-
-    <div class="firework" id="firework-left3">
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-      <div class="explosion"></div>
-    </div>
-
-    <div class="fireworks-rights" id="fireworks-rights">
-      <div class="firework" id="firework-right1">
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-      </div>
-      <div class="firework" id="firework-right2">
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-      </div>
-      <div class="firework" id="firework-right3">
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-        <div class="explosion"></div>
-      </div>
-    </div>
-    
-  </div>
-  
-  
   <script src="dist/pixi-legacy.min.js"></script>
   <script src="dist/axios.min.js"></script>
   <script type='module' src="/public/js/game.js"></script>

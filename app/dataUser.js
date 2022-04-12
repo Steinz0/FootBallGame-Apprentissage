@@ -84,7 +84,7 @@ class UserDB{
 
     getAdmin(){
         return new Promise((resolve, reject) => {
-            this.db.find({name: 'admin'}).exec( function (err, result) {
+            this.db.find({email: 'admin@admin'}).exec( function (err, result) {
                 if (err){
                     reject(err);
                 }
