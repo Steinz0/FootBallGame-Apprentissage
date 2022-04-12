@@ -4,20 +4,7 @@ from profAI import strategies as st
 from celery import Celery
 import random as random
 
-<<<<<<< HEAD
 celery_app = Celery('tasks', backend='amqp://guest:guest@rabbit:5672', broker='amqp://guest:guest@rabbit:5672')
-=======
-# Last hit Class
-class LastHit() :
-    def __init__(self) :
-        self.LH = (0,0)
-    def update(self, key) :
-        self.LH = key
-    def reset(self) :
-        self.LH = (0,0)
-
-# celery_app = Celery('tasks', backend='amqp://guest:guest@rabbit:5672', broker='amqp://guest:guest@rabbit:5672')
->>>>>>> 6747505bf1823ccd368e357c60b8fa1dc496790d
 
 celery_app.conf.update(
     CELERY_ROUTES = {"create_match": {"queue": "create_match"}},
@@ -45,7 +32,6 @@ def create_match(max_steps=2000):
 
     return filename
 
-<<<<<<< HEAD
 # # create_match()
 # # Match test pour les strategies
 # max_steps=1000
@@ -65,30 +51,3 @@ def create_match(max_steps=2000):
 # #Jouer et afficher la partie
 # simu.start()
 # show_simu(simu)
-=======
-# create_match()
-# Match test pour les strategies
-max_steps=1000
-lh = LastHit()
-
-# Création Equipe 1
-thon = SoccerTeam(name="Red Team")
-thon.add("PyPlayer",st.DefenseurStrategy(lh)) #Strategie qui ne fait rien
-thon.add("PyPlayer",st.DefenseurStrategy(lh)) #Strategie qui ne fait rien
-# thon.add("PyPlayer",st.ForwardStrategy(lh)) #Strategie qui fonce
-# thon.add("PyPlayer",st.ForwardStrategy(lh)) #Strategie qui fonce
-
-
-# Création Equipe 2
-thon2 = SoccerTeam(name="Blue Team")
-# thon2.add("PyPlayer",st.DefenseurStrategy(lh)) #Strategie qui ne fait rien
-# thon2.add("PyPlayer",st.DefenseurStrategy(lh)) #Strategie qui ne fait rien
-# thon2.add("PyPlayer",st.ForwardStrategy(lh)) #Strategie qui fonce
-thon2.add("PyPlayer",st.ForwardStrategy(lh)) #Strategie qui ne fait rien
-
-#Creation d'une partie
-simu = Simulation(thon, thon2, max_steps=max_steps, lasthit=lh)
-#Jouer et afficher la partie
-simu.start()
-show_simu(simu)
->>>>>>> 6747505bf1823ccd368e357c60b8fa1dc496790d

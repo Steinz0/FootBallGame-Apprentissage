@@ -8,7 +8,7 @@ RUN npm install --prefix /foot/app
 COPY /app/dist /foot/app/dist
 COPY /app/webapp /foot/app/webapp
 COPY /app/*.js /foot/app/
-COPY /app/*.db /foot/app/
+COPY /app/Data /foot/app/
 COPY /gameEngine /foot/gameEngine
 COPY /logsGames /foot/logsGames 
 COPY run_celery.sh /foot

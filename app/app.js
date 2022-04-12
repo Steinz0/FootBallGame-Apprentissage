@@ -48,7 +48,7 @@ function get_path(file){
 // Load Databases
 
 console.log('Loading MongoDB Users ...');
-const db2 = new Datastore({filename: './app/users.db', autoload: true})
+const db2 = new Datastore({filename: './app/Data/users.db', autoload: true})
 db2.loadDatabase(err => {
   if (err) console.log('Error Database Users:', err); 
   else console.log('MongoDB Users OK!');
@@ -57,7 +57,7 @@ db2.loadDatabase(err => {
 const usersDB = new UserDB.default(db2)
 
 console.log('Loading MongoDB Orders ...');
-const db1 = new Datastore({filename: './app/database.db', autoload: true})
+const db1 = new Datastore({filename: './app/Data/database.db', autoload: true})
 db1.loadDatabase(err => {
     if (err) console.log('Error Database Orders:', err); 
     else console.log('MongoDB Orders OK!');
