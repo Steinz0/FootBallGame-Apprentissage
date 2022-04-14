@@ -17,12 +17,12 @@ def create_match(max_steps=2000):
     ## Creation d'une equipe
     pyteam = get_team(1)
     thon = SoccerTeam(name="ThonTeam")
-    thon.add("PyPlayer",st.DefenseurStrategy()) #Strategie qui fonce
-    thon.add("PyPlayer",st.ForwardStrategy()) #Strategie qui ne fait rien
+    thon.add("PyPlayer",FonceurStrategy()) #Strategie qui fonce
+    thon.add("PyPlayer",DefenseurStrategy()) #Strategie qui ne fait rien
 
     thon2 = SoccerTeam(name="ThonTeam2")
-    thon2.add("PyPlayer",st.DefenseurStrategy()) #Strategie qui ne fait rien
-    thon2.add("PyPlayer",st.ForwardStrategy()) #Strategie qui ne fait rien
+    thon2.add("PyPlayer",DefenseurStrategy()) #Strategie qui ne fait rien
+    thon2.add("PyPlayer",FonceurStrategy()) #Strategie qui ne fait rien
 
     filename = str(random.random()*100000000)
     #Creation d'une partie

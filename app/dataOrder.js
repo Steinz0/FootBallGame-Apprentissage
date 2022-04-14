@@ -4,9 +4,9 @@ class OrderDB{
         this.db.loadDatabase();
     };
 
-    insertData(userId, ballCoord, redCoords, blueCoords, score, actualPlayer, order) {
+    insertData(userId, ballCoord, redCoords, blueCoords, score, actualPlayer, team, order) {
         return new Promise((resolve, reject) => {
-            this.db.insert({userId, ballCoord, redCoords, blueCoords, score, actualPlayer, order}, function(err, result) {
+            this.db.insert({userId, ballCoord, redCoords, blueCoords, score, actualPlayer, team, order}, function(err, result) {
                 if (err) {
                     reject(err);
                 }else{

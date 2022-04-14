@@ -1,4 +1,4 @@
-FROM nikolaik/python-nodejs:latest
+FROM beevelop/nodejs-python:nightly
 WORKDIR /foot
 RUN mkdir /foot/app
 RUN mkdir /foot/gameEngine

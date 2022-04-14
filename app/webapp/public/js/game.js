@@ -252,16 +252,18 @@ async function insertData(userId){
 		redCoords.push([parseFloat(redTeam[i].position.x), parseFloat(redTeam[i].position.y)])
 		blueCoords.push([parseFloat(blueTeam[i].position.x), parseFloat(blueTeam[i].position.y)])
 	}
-	const actualPlayer = [parseFloat(document.querySelector('#x').innerHTML), parseFloat(document.querySelector('#y').innerHTML)]
+	const actualPlayer = [parseFloat(document.querySelector('#x').innerHTML.split(' ')[2]), parseFloat(document.querySelector('#y').innerHTML.split(' ')[2])]
+	const team = document.querySelector('#Team').innerHTML.split(' ')[2]
 	const order = document.querySelector('#choose').value;
 
 	const data = {
 		userId: userId,
         ballCoord: ballCoord,
         redCoords: redCoords,
-        blueCoords: redCoords,
+        blueCoords: blueCoords,
         score: [parseInt(score[0]), parseInt(score[1])],
         actualPlayer: actualPlayer,
+		team: team,
         order: order
     }
 	await axios.post('http://localhost:3000/db', data)

@@ -263,6 +263,9 @@ canvas {
 
 .mid-center{
     order: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .mid-center .manage {
@@ -287,6 +290,12 @@ canvas {
     order: 2;
 }
 
+.confirm-new-game {
+    color: #49f6d8;
+    margin: 10px 0;
+    font-size: 20px;
+}
+
 .mid-right {
     order: 3;
     margin-left: 20px;
@@ -298,7 +307,7 @@ canvas {
     order: 3;
     display: flex;
     flex-direction: column;
-    /* visibility: hidden; */
+    visibility: hidden;
     margin-bottom: 1em;
     margin-left: 20px;
     border: 10px solid transparent;
@@ -466,16 +475,6 @@ hr.line {
     /* touch-action: manipulation; */
     box-shadow: -6px 8px 10px rgba(81,41,10,0.1),0px 2px 2px rgba(81,41,10,0.2);
 }
-
-/* .button-train-ai:active {
-    background-color: #f3f4f6;
-    box-shadow: -1px 2px 5px rgba(81,41,10,0.15),0px 1px 1px rgba(81,41,10,0.15);
-    transform: translateY(0.125rem);
-}
-
-.button-train-ai:focus {
-    box-shadow: rgba(72, 35, 7, .46) 0 0 0 4px, -6px 8px 10px rgba(81,41,10,0.1), 0px 2px 2px rgba(81,41,10,0.2);
-} */
 
 .submit-button, .delete-button, .file-button-show, .manage-AI-button{
   appearance: none;

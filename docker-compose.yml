@@ -13,8 +13,8 @@ services:
     hostname: web
     command: node app/app.js
     volumes:
-      - /home/kali/FootballGame-ML/logsGames:/foot/logsGames
-      - /home/kali/FootballGame-ML/app/Data:/foot/app/Data
+      - ./logsGames:/foot/logsGames
+      - ./app/Data:/foot/app/Data
     ports:
       - "3000:3000"
     links:
@@ -30,7 +30,7 @@ services:
       dockerfile: Dockerfile
     command: ./run_celery.sh
     volumes:
-      - /home/kali/FootballGame-ML/logsGames:/foot/logsGames
+      - ./logsGames:/foot/logsGames
     links:
       - rabbit
     depends_on:
