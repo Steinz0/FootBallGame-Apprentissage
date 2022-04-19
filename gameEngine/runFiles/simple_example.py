@@ -50,15 +50,15 @@ lh = LastHit()
 thon = SoccerTeam(name="Red Team")
 thon.add("PyPlayer",st.DefenseurStrategy(lh)) #Strategie qui ne fait rien
 thon.add("PyPlayer",st.DefenseurStrategy(lh)) #Strategie qui ne fait rien
-# thon.add("PyPlayer",st.ForwardStrategy(lh)) #Strategie qui fonce
-# thon.add("PyPlayer",st.ForwardStrategy(lh)) #Strategie qui fonce
+thon.add("PyPlayer",st.ForwardStrategy(lh)) #Strategie qui fonce
+thon.add("PyPlayer",st.ForwardStrategy(lh)) #Strategie qui fonce
 
 
 # Création Equipe 2
 thon2 = SoccerTeam(name="Blue Team")
-# thon2.add("PyPlayer",st.DefenseurStrategy(lh)) #Strategie qui ne fait rien
-# thon2.add("PyPlayer",st.DefenseurStrategy(lh)) #Strategie qui ne fait rien
-# thon2.add("PyPlayer",st.ForwardStrategy(lh)) #Strategie qui fonce
+thon2.add("PyPlayer",st.DefenseurStrategy(lh)) #Strategie qui ne fait rien
+thon2.add("PyPlayer",st.DefenseurStrategy(lh)) #Strategie qui ne fait rien
+thon2.add("PyPlayer",st.ForwardStrategy(lh)) #Strategie qui fonce
 thon2.add("PyPlayer",st.ForwardStrategy(lh)) #Strategie qui ne fait rien
 
 #Creation d'une partie
