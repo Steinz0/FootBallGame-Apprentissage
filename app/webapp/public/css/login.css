@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Register</title>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
-    <!--Stylesheet-->
-    <style media="screen">
-      *,
+*,
       *:before,
       *:after{
           padding: 0;
@@ -43,13 +34,13 @@
           background: linear-gradient(
               to right,
               #ff512f,
-              #ff0000
+              #fd0000
           );
           right: -30px;
           bottom: -80px;
       }
       form{
-          height: 530px;
+          height: 520px;
           width: 400px;
           background-color: rgba(255,255,255,0.13);
           position: absolute;
@@ -136,7 +127,6 @@
           transform: translateX(50%);
           text-align: center;
           color: white;
-          
       }
       h4{
           width: 20%;
@@ -176,42 +166,3 @@
       button:hover{
           border: none;
       }
-
-    </style>
-</head>
-<body>
-    <div class="background">
-        <div class="shape"></div>
-        <div class="shape"></div>
-    </div>
-    <div class=banner>
-      <div class="navbar">
-        <ul>
-            <li><a href="/">Accueil</a></li>
-            <li><a href="./login">Login</a></li>
-            <li><a href="https://github.com/Steinz0/FootballGame-ML/blob/main/Rules.md">Rules</a></li>
-            <li><a href="https://github.com/Steinz0/FootBallGame-Apprentissage">Documentation</a></li>
-        </ul>
-      </div>
-      <div class=content>
-        <% if (messages.error) { %>
-          <%= messages.error %>
-        <% } %>
-        <form action="/register" method="POST">
-          <h3>Register</h3>
-
-          <label for="name">Name</label>
-          <input type="text" placeholder="Name" id="name" name="name" required>
-
-          <label for="email">Email</label>
-          <input type="email" placeholder="Email" id="email" name="email" required>
-
-          <label for="password">Password</label>
-          <input type="password" placeholder="Password" id="password" name="password" required>
-
-          <button type="submit"><span></span>Register</button>
-    </form>        
-    </div>
-    </div>
-</body>
-</html>

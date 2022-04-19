@@ -1,4 +1,4 @@
-FROM nikolaik/python-nodejs:latest
+FROM beevelop/nodejs-python:nightly
 WORKDIR /foot
 RUN mkdir /foot/app
 RUN mkdir /foot/gameEngine
@@ -8,15 +8,11 @@ RUN npm install --prefix /foot/app
 COPY /app/dist /foot/app/dist
 COPY /app/webapp /foot/app/webapp
 COPY /app/*.js /foot/app/
-COPY /app/*.db /foot/app/
+COPY /app/Data /foot/app/
 COPY /gameEngine /foot/gameEngine
 COPY /logsGames /foot/logsGames 
 COPY run_celery.sh /foot
-# RUN apt-get update -y
-# RUN apt-get install -y freeglut3-dev
 RUN pip install -e /foot/gameEngine --user
 RUN pip install celery==4.4.6
 RUN pip install typing-extensions
-# CMD ["node", "app/app.js"]
-# CMD ["ls", "app"]
 CMD ./run_celery.sh

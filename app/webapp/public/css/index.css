@@ -75,7 +75,6 @@ input[type="range"] {
     align-items: center;
     justify-content: space-between;
     margin-left: 20px;
-    color: ;
 }
 .navbar ul li{
     list-style: none;
@@ -118,7 +117,17 @@ input[type="range"] {
     left: 80%;
     top: 2%;
 }
-
+span[class = log]{
+    background: #009688;
+    height: 100%;
+    width: 0;
+    border-radius: 25px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: -1;
+    transition: 0.5s;
+}
 .buttonLog:hover span{
     width: 100%;
 }
@@ -254,6 +263,9 @@ canvas {
 
 .mid-center{
     order: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .mid-center .manage {
@@ -278,6 +290,12 @@ canvas {
     order: 2;
 }
 
+.confirm-new-game {
+    color: #49f6d8;
+    margin: 10px 0;
+    font-size: 20px;
+}
+
 .mid-right {
     order: 3;
     margin-left: 20px;
@@ -289,7 +307,7 @@ canvas {
     order: 3;
     display: flex;
     flex-direction: column;
-    /* visibility: hidden; */
+    visibility: hidden;
     margin-bottom: 1em;
     margin-left: 20px;
     border: 10px solid transparent;
@@ -458,51 +476,49 @@ hr.line {
     box-shadow: -6px 8px 10px rgba(81,41,10,0.1),0px 2px 2px rgba(81,41,10,0.2);
 }
 
-/* .button-train-ai:active {
-    background-color: #f3f4f6;
-    box-shadow: -1px 2px 5px rgba(81,41,10,0.15),0px 1px 1px rgba(81,41,10,0.15);
-    transform: translateY(0.125rem);
-} */
+.submit-button, .delete-button, .file-button-show, .manage-AI-button{
+  appearance: none;
+  background-color: transparent;
+  border: 2px solid white;
+  border-radius: 15px;
+  box-sizing: border-box;
+  color: white;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+  margin: 0;
+  min-height: 60px;
+  min-width: 0;
+  outline: none;
+  padding: 16px 24px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+  will-change: transform;
+}
 
-/* .button-train-ai:focus {
-    box-shadow: rgba(72, 35, 7, .46) 0 0 0 4px, -6px 8px 10px rgba(81,41,10,0.1), 0px 2px 2px rgba(81,41,10,0.2);
-} */
+.submit-button:disabled, .delete-button:disabled, .file-button-show:disabled, .manage-AI-button:disabled{
+  pointer-events: none;
+}
 
-.submit-button{
-    appearance: button;
-    background-color: transparent;
-    background-image: linear-gradient(to bottom, #fff, #f8eedb);
-    border: 0 solid #e5e7eb;
-    border-radius: .5rem;
-    box-sizing: border-box;
-    color: #482307;
-    cursor: pointer;
-    display: flex;
-    font-family: ui-sans-serif,system-ui,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-    font-size: 65%;
-    font-weight: 700;
-    width: 150px;
-    margin: 0;
-    outline: 2px solid transparent;
-    padding: 1rem 1rem;
-    text-align: center;
-    text-transform: none;
-    transition: all .1s cubic-bezier(.4, 0, .2, 1);
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    box-shadow: -6px 8px 10px rgba(81,41,10,0.1),0px 2px 2px rgba(81,41,10,0.2);
-  }
-  
-.submit-button{
-    background-color: #f3f4f6;
-    box-shadow: -1px 2px 5px rgba(81,41,10,0.15),0px 1px 1px rgba(81,41,10,0.15);
-    transform: translateY(0.125rem);
-  }
-  
-.submit-button{
-    box-shadow: rgba(72, 35, 7, .46) 0 0 0 4px, -6px 8px 10px rgba(81,41,10,0.1), 0px 2px 2px rgba(81,41,10,0.2);
-  }
+.submit-button:hover, .delete-button:hover, .file-button-show:hover, .manage-AI-button:hover{
+  color: #fff;
+  background-color: #1A1A1A;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+
+.submit-button:active, .delete-button:active, .file-button-show:active, .manage-AI-button:active{
+  box-shadow: none;
+  transform: translateY(0);
+}
 
 canvas {
     border-radius: 1%;

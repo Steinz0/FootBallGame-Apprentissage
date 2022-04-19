@@ -69,3 +69,16 @@ class Comportement(ProxyObj):
         raise(NotImplementedError)
     def degage(self):
         raise(NotImplementedError)
+
+
+def extrator_features(data):
+    data_dict = dict()
+    data_dict["ballCoord"] = [data["ballCoord"][0],data["ballCoord"][1]]
+    redList = data["redCoords"]
+    blueList = data["blueCoords"]
+    data_dict["redCoords"] = []
+    data_dict["blueCoords"] = []
+    for r in redList:
+        data_dict["redCoords"].append([int(r[0]),int(r[1])])
+    for b in blueList:
+        data_dict["blueCoords"].append([int(b[0]),int(b[1])])                  

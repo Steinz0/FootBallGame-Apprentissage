@@ -3,8 +3,6 @@
 var fs                   = require('fs');
 var path                 = require("path");
 var cors                 = require('cors');
-var JSZip                = require("jszip");
-var FileSaver            = require('file-saver');
 const express            = require('express');
 
 const celery             = require('celery-node');
@@ -19,6 +17,8 @@ const session            = require('express-session');
 const SQLiteStore        = require('connect-sqlite3')(session)
 const methodOverride     = require('method-override');
 const initializePassport = require('./passport-config');
+
+const zip                = require('express-zip')
 
 const app = express();
 app.use(cors());
@@ -48,7 +48,7 @@ function get_path(file){
 // Load Databases
 
 console.log('Loading MongoDB Users ...');
-const db2 = new Datastore({filename: './app/users.db', autoload: true})
+const db2 = new Datastore({filename: './app/Data/users.db', autoload: true})
 db2.loadDatabase(err => {
   if (err) console.log('Error Database Users:', err); 
   else console.log('MongoDB Users OK!');
@@ -57,7 +57,7 @@ db2.loadDatabase(err => {
 const usersDB = new UserDB.default(db2)
 
 console.log('Loading MongoDB Orders ...');
-const db1 = new Datastore({filename: './app/database.db', autoload: true})
+const db1 = new Datastore({filename: './app/Data/database.db', autoload: true})
 db1.loadDatabase(err => {
     if (err) console.log('Error Database Orders:', err); 
     else console.log('MongoDB Orders OK!');
@@ -133,7 +133,7 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
       res.redirect('/register')
     }
   } catch {
-    window.alert('User already exist !')
+    console.log('User already exist !')
   }
 })
 
@@ -157,14 +157,16 @@ async function Producer(req, res) {
 
   result.get().then(data => {
     putMatch(req, res, data)
+    res.redirect('game')
+
     client.disconnect();
   })
-  
+  res.end(compiled({temp: temp}));
 }
 
 async function putMatch(req, res, data) {
   await usersDB.addMatch(req.session.passport.user, data)
-  //res.redirect('/game')
+  
 }
 // Other routes  
 
@@ -172,7 +174,7 @@ app.get('/', (req, res) => {
   res.sendFile(get_path("home.html"));
 });
 app.get('/game', checkAuthenticated, (req, res) => {
-  res.render('index.ejs')//sendFile(get_path("index.html"));
+  res.render('index.ejs')
 });
 app.get('/rules', (req, res) => {
   res.sendFile(get_path("rules.html"));
@@ -180,8 +182,28 @@ app.get('/rules', (req, res) => {
 
 app.get('/create', checkAuthenticated, (req, res) => {
   Producer(req, res);
-  res.redirect('game')
-  //res.sendFile(get_path("index.html"));
+  // res.redirect('game')
+});
+
+app.get('/getLogs', checkAuthenticated, (req, res) => {
+  let formatForZIP = []
+  
+  fs.readdir('logsGames', (err, files) => {
+    files.forEach(file => {
+      formatForZIP.push({
+        path: 'logsGames/'+file,
+        name: file
+      })
+    });
+    res.zip(formatForZIP)
+  });
+});
+
+app.get('/getOrders', checkAuthenticated, (req, res) => {
+    res.zip([{
+      path: 'app/Data/database.db',
+      name: 'database.db'
+    }])
 });
 
 // Create all HTML routes
@@ -216,9 +238,9 @@ app
   })
   .post( async (req,res) => {
     console.log(req.body)
-    const {ballCoord, redCoords, blueCoords, score, actualPlayer, order} = req.body
+    const {ballCoord, redCoords, blueCoords, score, actualPlayer, team, order} = req.body
     try {
-    const data = ordersDB.insertData(req.session.passport.user, ballCoord, redCoords, blueCoords, score, actualPlayer, order)
+    const data = ordersDB.insertData(req.session.passport.user, ballCoord, redCoords, blueCoords, score, actualPlayer, team, order)
       if (!data){
           res.status(404).send({"status": "error", "msg": "Error to put data retry"});
       }else
@@ -251,9 +273,6 @@ app
     }
   })
   
-app.get('/admin', async (req, res) => {
-  downloadLogs();
-});
 
 async function readTextFile(filename) {
   try {
@@ -264,19 +283,6 @@ async function readTextFile(filename) {
   }
 }
 
-async function downloadLogs(){
-  let zip = new JSZip();
-
-  const filesLogs = fromDir(path.join(__dirname, "../logsGames/"),'.txt');
-  filesLogs.forEach(e => {
-    let data = readTextFile(e)
-    zip.file(e.split('\\').at(-1), data)
-  });
-  zip.generateAsync({type:'nodebuffer'})
-  .then(function(content) {
-    FileSaver.saveAs(content, "download.zip")
-  })
-}
 
 // Start the server
 

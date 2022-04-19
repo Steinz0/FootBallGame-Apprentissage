@@ -34,7 +34,7 @@ def entrainer(fname):
     team2.add("Player",FonceurStrategy()) 
     simu = Simulation(team1,team2)
     #Jouer, afficher et controler la partie
-    show_simu(simu)
+    #show_simu(simu)
     print("Nombre d'exemples : "+str(len(kb_strat.states)))
     # Sauvegarde des etats dans un fichier
     dump_jsonz(kb_strat.states,fname)
@@ -71,5 +71,5 @@ if __name__=="__main__":
     team2.add("Joueur 1", FonceurStrategy())
     team2.add("Joueur 2",DefenseurStrategy())
     simu = Simulation(treeteam,team2)
-    show_simu(simu)
+    #show_simu(simu)
 
