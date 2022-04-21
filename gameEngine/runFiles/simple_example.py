@@ -32,22 +32,22 @@ def create_match(max_steps=2000):
 
     return filename
 
-# # create_match()
-# # Match test pour les strategies
-# max_steps=1000
+# create_match()
+# Match test pour les strategies
+max_steps=1000
 
-# # Création Equipe 1
-# thon = SoccerTeam(name="ThonTeam")
-# thon.add("PyPlayer",st.ForwardStrategy()) #Strategie qui fonce
-# thon.add("PyPlayer",st.DefenseurStrategy()) #Strategie qui ne fait rien
+# Création Equipe 1
+thon = SoccerTeam(name="ThonTeam")
+thon.add("PyPlayer",FonceurStrategy()) #Strategie qui fonce
+thon.add("PyPlayer",DefenseurStrategy()) #Strategie qui ne fait rien
 
-# # Création Equipe 2
-# thon2 = SoccerTeam(name="ThonTeam2")
-# thon2.add("PyPlayer",st.DefenseurStrategy()) #Strategie qui ne fait rien
-# thon2.add("PyPlayer",st.ForwardStrategy()) #Strategie qui ne fait rien
+# Création Equipe 2
+thon2 = SoccerTeam(name="ThonTeam2")
+thon2.add("PyPlayer",DefenseurStrategy()) #Strategie qui ne fait rien
+thon2.add("PyPlayer",FonceurStrategy()) #Strategie qui ne fait rien
 
-# #Creation d'une partie
-# simu = Simulation(thon,thon2,max_steps=max_steps)
-# #Jouer et afficher la partie
-# simu.start()
+#Creation d'une partie
+simu = Simulation(thon,thon2,max_steps=max_steps)
+#Jouer et afficher la partie
+simu.start()
 # show_simu(simu)

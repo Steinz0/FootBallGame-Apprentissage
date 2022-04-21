@@ -1,4 +1,4 @@
-FROM beevelop/nodejs-python:nightly
+FROM beevelop/nodejs-python:latest
 WORKDIR /foot
 RUN mkdir /foot/app
 RUN mkdir /foot/gameEngine
@@ -15,4 +15,4 @@ COPY run_celery.sh /foot
 RUN pip install -e /foot/gameEngine --user
 RUN pip install celery==4.4.6
 RUN pip install typing-extensions
-CMD ./run_celery.sh
+# CMD ./run_celery.sh
