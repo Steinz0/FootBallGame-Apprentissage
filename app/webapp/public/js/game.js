@@ -7,7 +7,7 @@ let blueTeam = []
 let redTeam = []
 let score = [0,0]
 let play = false
-let filename = 'file_data'
+let filename = 'example'
 
 const Application = PIXI.Application;
 
@@ -91,10 +91,10 @@ function doneLoading() {
 function createPlayer() {
 
 	// Blue team creation
-	let blueNames = ['Jeremy', 'Ethan']
+	let blueNames = ['Nicolas','Krisni','Jeremy', 'Ethan']
 	for (let i=0; i<settings.NUMBEROFPLAYERSBYTEAM; i++){
 		// Player creation
-		let player = new Player(blueNames[i], '1', 100 , 100 + (i*10), 'none', 'Blue', stadium.loader.resources['blue'].texture)
+		let player = new Player(blueNames[i], '1', 100 , 100 + (i*50), 'none', 'Blue', stadium.loader.resources['blue'].texture)
 
 		allPlayers.push(player)
 		blueTeam.push(player)
@@ -102,11 +102,11 @@ function createPlayer() {
 		stadium.stage.addChild(player)
 		stadium.stage.addChild(player.directLine)
 	}
-	let redNames = ['Niko', 'Dan']
+	let redNames = ['Vincent','Santhos','Niko', 'Dan']
 	// Red team creation
 	for (let i=0; i<settings.NUMBEROFPLAYERSBYTEAM; i++){
 		// Player creation
-		let player = new Player(redNames[i], '1', 200 , 200 + (i*10), 'none', 'Red', stadium.loader.resources['red'].texture)
+		let player = new Player(redNames[i], '1', 200 , 200 + (i*50), 'none', 'Red', stadium.loader.resources['red'].texture)
 
 		allPlayers.push(player)
 		redTeam.push(player)

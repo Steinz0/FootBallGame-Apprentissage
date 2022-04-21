@@ -17,7 +17,7 @@
     </ul>
 
     <form action="/logout?_method=DELETE" method="POST">
-      <button type="submit" class="buttonLog"><span></span>Log Out</button>
+      <button type="submit" class="buttonLog"><span class="spanLog"></span>Log Out</button>
     </form>
   </div>
   
@@ -108,24 +108,14 @@
             <div class="choose-order">
             <label for="choose" class="label-choose">Order</label>
             <select id="choose" class="choose">
-              <option value="runAdvGoal">Courir - Cages adverses</option>
-              <option value="runTeamGoal">Courir - Cages équipe</option>
-              <option value="runBall">Courir - Vers la balle</option>
-              <option value="runAway">Courir - Se démarquer</option>
-
-              <option value="defendGoal">Défendre - Ligne de but</option>
-              <option value="markBallHolder">Défendre - Porteur du ballon</option>
-              <option value="markNearestBall">Défendre - Marquage du joueur libre</option>
-
-              <option value="shootAdvGoal">Tirer - Cages adverses</option>
-              <option value="passNearest">Tirer - Passe au plus proche</option>
-              <option value="passFarthest">Tirer - Passe au plus lointain</option>
-              <option value="crossGoal">Tirer - Centre devant les buts</option>
+              <option value="runAdvGoal">Attaque - Cages adverses</option>
+              <option value="runTop">Attaque - Se démarquer en haut</option>
+              <option value="runBottom">Attaque - Se démarquer en bas</option>
+              <option value="defendGoal">Defendre - Cages équipes</option>
+              <option value="defendCenter">Defendre - Au milieu du camp</option>
+              <option value="defendBall">Defendre - Marquer la balle</option>
+              <option value="shootBall">Tirer - Les buts</option>
               <option value="clearBall">Tirer - Dégage la balle</option>
-
-              <option value="dribbleAdvGoal">Dribbler - Cages adverses</option>
-              <option value="dribbleTeammate">Dribbler - Coéquipier proche</option>
-              <option value="dribbleAway">Dribbler - Loin des adversaires</option>
             </select>
             <button class="submit-button">Send Order</button>
           </div>

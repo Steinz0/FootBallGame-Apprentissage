@@ -96,6 +96,7 @@ app.use(flash())
 app.use(session({
   store: new SQLiteStore,
   secret: "secretwsrhworhpwq",
+  cookie: {maxAge: 1000 * 60 * 60 * 24},
   resave: false,
   saveUninitialized: false,
 }))

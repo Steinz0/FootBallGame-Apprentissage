@@ -6,7 +6,7 @@ class UserDB{
 
     createUser(name, email, password) {
         return new Promise((resolve, reject) => {
-            let idMatches = []
+            let idMatches = ["example"]
             this.db.insert({name, email, password, idMatches}, function(err, result) {
                 if (err) {
                     reject(err);

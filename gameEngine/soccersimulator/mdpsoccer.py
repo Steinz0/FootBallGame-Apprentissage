@@ -322,6 +322,10 @@ class SoccerState(object):
         quarters = [i * settings.GAME_HEIGHT / 4. for i in range(1, 4)]
         rows = [settings.GAME_WIDTH * 0.1, settings.GAME_WIDTH * 0.35, settings.GAME_WIDTH * (1 - 0.35),
                 settings.GAME_WIDTH * (1 - 0.1)]
+    
+        redMax = (settings.PLAYER_RADIUS, settings.GAME_WIDTH/2-settings.PLAYER_RADIUS)
+        blueMax = (settings.GAME_WIDTH/2, settings.GAME_WIDTH-settings.PLAYER_RADIUS)
+
         if nb_players_1 == 1:
             self.states[(1, 0)] = PlayerState(position=Vector2D(rows[0], quarters[1]))
         if nb_players_2 == 1:
@@ -341,15 +345,15 @@ class SoccerState(object):
             self.states[(2, 1)] = PlayerState(position=Vector2D(rows[3], quarters[0]))
             self.states[(2, 2)] = PlayerState(position=Vector2D(rows[3], quarters[2]))
         if nb_players_1 == 4:
-            self.states[(1, 0)] = PlayerState(position=Vector2D(rows[0], quarters[0]))
-            self.states[(1, 1)] = PlayerState(position=Vector2D(rows[0], quarters[2]))
-            self.states[(1, 2)] = PlayerState(position=Vector2D(rows[1], quarters[0]))
-            self.states[(1, 3)] = PlayerState(position=Vector2D(rows[1], quarters[2]))
+            self.states[(1, 0)] = PlayerState(position=Vector2D(random.randint(redMax[0], redMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS)))
+            self.states[(1, 1)] = PlayerState(position=Vector2D(random.randint(redMax[0], redMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS)))
+            self.states[(1, 2)] = PlayerState(position=Vector2D(random.randint(redMax[0], redMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS)))
+            self.states[(1, 3)] = PlayerState(position=Vector2D(random.randint(redMax[0], redMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS)))
         if nb_players_2 == 4:
-            self.states[(2, 0)] = PlayerState(position=Vector2D(rows[3], quarters[0]))
-            self.states[(2, 1)] = PlayerState(position=Vector2D(rows[3], quarters[2]))
-            self.states[(2, 2)] = PlayerState(position=Vector2D(rows[2], quarters[0]))
-            self.states[(2, 3)] = PlayerState(position=Vector2D(rows[2], quarters[2]))
+            self.states[(2, 0)] = PlayerState(position=Vector2D(random.randint(blueMax[0], blueMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS)))
+            self.states[(2, 1)] = PlayerState(position=Vector2D(random.randint(blueMax[0], blueMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS)))
+            self.states[(2, 2)] = PlayerState(position=Vector2D(random.randint(blueMax[0], blueMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS)))
+            self.states[(2, 3)] = PlayerState(position=Vector2D(random.randint(blueMax[0], blueMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS)))
 
         if nb_players_1 == 1:
             self.init_states[(1, 0)] = Vector2D(rows[0], quarters[1])
@@ -369,22 +373,40 @@ class SoccerState(object):
             self.init_states[(2, 0)] = Vector2D(rows[3], quarters[1])
             self.init_states[(2, 1)] = Vector2D(rows[3], quarters[0])
             self.init_states[(2, 2)] = Vector2D(rows[3], quarters[2])
+
+
         if nb_players_1 == 4:
-            self.init_states[(1, 0)] = Vector2D(rows[0], quarters[0])
-            self.init_states[(1, 1)] = Vector2D(rows[0], quarters[2])
-            self.init_states[(1, 2)] = Vector2D(rows[1], quarters[0])
-            self.init_states[(1, 3)] = Vector2D(rows[1], quarters[2])
+            self.init_states[(1, 0)] = Vector2D(random.randint(redMax[0], redMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS))
+            self.init_states[(1, 1)] = Vector2D(random.randint(redMax[0], redMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS))
+            self.init_states[(1, 2)] = Vector2D(random.randint(redMax[0], redMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS))
+            self.init_states[(1, 3)] = Vector2D(random.randint(redMax[0], redMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS))
         if nb_players_2 == 4:
-            self.init_states[(2, 0)] = Vector2D(rows[3], quarters[0])
-            self.init_states[(2, 1)] = Vector2D(rows[3], quarters[2])
-            self.init_states[(2, 2)] = Vector2D(rows[2], quarters[0])
-            self.init_states[(2, 3)] = Vector2D(rows[2], quarters[2])
+            self.init_states[(2, 0)] = Vector2D(random.randint(blueMax[0], blueMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS))
+            self.init_states[(2, 1)] = Vector2D(random.randint(blueMax[0], blueMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS))
+            self.init_states[(2, 2)] = Vector2D(random.randint(blueMax[0], blueMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS))
+            self.init_states[(2, 3)] = Vector2D(random.randint(blueMax[0], blueMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS))
 
         self.ball = Ball(Vector2D(settings.GAME_WIDTH / 2, settings.GAME_HEIGHT / 2),Vector2D())
 
         self.goal = 0
 
+    def init_state_random(self):
+        redMax = (settings.PLAYER_RADIUS, settings.GAME_WIDTH/2-settings.PLAYER_RADIUS)
+        blueMax = (settings.GAME_WIDTH/2, settings.GAME_WIDTH-settings.PLAYER_RADIUS)
 
+        self.init_states[(1, 0)] = Vector2D(random.randint(redMax[0], redMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS))
+        self.init_states[(1, 1)] = Vector2D(random.randint(redMax[0], redMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS))
+        self.init_states[(1, 2)] = Vector2D(random.randint(redMax[0], redMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS))
+        self.init_states[(1, 3)] = Vector2D(random.randint(redMax[0], redMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS))
+
+        self.init_states[(2, 0)] = Vector2D(random.randint(blueMax[0], blueMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS))
+        self.init_states[(2, 1)] = Vector2D(random.randint(blueMax[0], blueMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS))
+        self.init_states[(2, 2)] = Vector2D(random.randint(blueMax[0], blueMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS))
+        self.init_states[(2, 3)] = Vector2D(random.randint(blueMax[0], blueMax[1]),random.randint(0,settings.GAME_HEIGHT-settings.PLAYER_RADIUS))
+
+        self.ball = Ball(Vector2D(settings.GAME_WIDTH / 2, settings.GAME_HEIGHT / 2),Vector2D())
+
+        self.goal = 0
 
 ###############################################################################
 # SoccerTeam

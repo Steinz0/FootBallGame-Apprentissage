@@ -117,7 +117,7 @@ input[type="range"] {
     left: 80%;
     top: 2%;
 }
-span[class = log]{
+.spanLog{
     background: #009688;
     height: 100%;
     width: 0;
