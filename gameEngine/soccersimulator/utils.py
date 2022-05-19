@@ -46,9 +46,9 @@ def to_json(obj):
 def from_json(strg):
     return json.loads(strg,cls=MyJSONDecoder)
 def from_jsonz(strg):
-    return from_json(zlib.decompress(base64.decodestring(strg)).decode()) 
+    return from_json(zlib.decompress(base64.decodebytes(strg)).decode()) 
 def to_jsonz(obj):
-    return base64.encodestring(zlib.compress(to_json(obj).encode())).decode()
+    return base64.encodebytes(zlib.compress(to_json(obj).encode())).decode()
 def dump_jsonz(obj,fname):
     with open(fname,"wb") as f:
         f.write(to_jsonz(obj).encode())

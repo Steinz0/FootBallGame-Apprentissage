@@ -162,7 +162,6 @@ async function Producer(req, res) {
 
     client.disconnect();
   })
-  res.end(compiled({temp: temp}));
 }
 
 async function putMatch(req, res, data) {

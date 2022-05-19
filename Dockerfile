@@ -11,6 +11,7 @@ COPY /app/*.js /foot/app/
 COPY /app/Data /foot/app/
 COPY /gameEngine /foot/gameEngine
 COPY /logsGames /foot/logsGames 
+COPY /extractData /foot/extractData 
 COPY run_celery.sh /foot
 RUN pip install -e /foot/gameEngine --user
 RUN pip install celery==4.4.6

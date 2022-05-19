@@ -1,15 +1,13 @@
 from cmath import inf
 from math import dist
-from tkinter import Y
 
 import numpy as np
 
 
 # To extract the data in the order file and create a matrix each line represents an order
-def extractDataBrut():
-    with open('order.txt', 'r') as f:
+def extractDataBrut(filename):
+    with open(filename, 'r') as f:
         lines = f.readlines()
-
         matrixBrut = []
 
         for l in lines:
@@ -39,17 +37,44 @@ def extractDataBrut():
             order = elements[-1][:-1]
 
             matrixBrut.append([ballCoord, redCoords, blueCoords, score, actualPlayer, team, order])
-        
+        # Each line : Tuple Vector Ball, List 
         return matrixBrut
 
+def transform_state(state, id_team, id_player):
+    # print(state)
+    ballCoord = (state.ball.position._x, state.ball.position._y)
+    redCoords = []
+    blueCoords = []
+    score = tuple(state.score.values())
+    actualPlayer = (state.init_states[(id_team, id_player)]._x, state.init_states[(id_team, id_player)]._y)
+    if id_team == 1:
+        team = 'Red'
+    else:
+        team = 'Blue'
+    for p in state.init_states:
+        pos = (state.init_states[p]._x, state.init_states[p]._y)
+        if p[0] == 1:
+            redCoords.append(pos)
+        else:
+            blueCoords.append(pos)
+
+    return [[ballCoord, redCoords, blueCoords, score, actualPlayer, team]]
 
 # we take the matrix and generate features for ours ml models
-def get_features_Y(matrixBrut):
+def get_features_y(matrix=None, filename=None, getY=True):
+    
+    matrixBrut = []
+    
+    if filename:
+        matrixBrut = extractDataBrut(filename)
+    elif matrix:
+        matrixBrut = matrix
+    
     features = []
     y = []
     for x in matrixBrut:
-    
-        y.append(x[-1])
+        if getY:
+            y.append(x[-1])
 
         redCages = (0,350)
         blueCages = (1200,350)
@@ -125,10 +150,3 @@ def get_features_Y(matrixBrut):
         features.append(np.array([actualPlayer[0], actualPlayer[0], distBall, distCagesAlly, distCagesEnnem, nbAllyMyZone, nbEnnemMyZone, nbAllynotMyZone, nbEnnemnotMyZone]))
 
     return np.array(features), np.array(y)
-
-mat = extractDataBrut()
-features,y = get_features_Y(mat)
-for f in features:
-    print(f)
-
-print(y)

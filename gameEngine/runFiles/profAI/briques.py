@@ -7,8 +7,8 @@ from soccersimulator.settings import maxPlayerShoot, maxPlayerSpeed, maxPlayerAc
 
 class ComportementNaif(Comportement):
     # Coefficients d'actions
-    RUN_COEF = maxPlayerAcceleration
-    GO_COEF = maxPlayerAcceleration / 5.
+    RUN_COEF = maxPlayerAcceleration / 2
+    GO_COEF = maxPlayerAcceleration / 3
 
     SHOOT_COEF = maxPlayerShoot * 2
     DRIBBLE_COEF = maxPlayerShoot
@@ -33,7 +33,7 @@ class ComportementNaif(Comportement):
         if shoot_coef is None:
             shoot_coef = self.SHOOT_COEF
         if self.can_kick:
-            return SoccerAction(shoot=(self.his_goal-self.ball_p).normalize()*self.SHOOT_COEF)
+            return SoccerAction(shoot=(self.his_goal-self.ball_p).normalize()*shoot_coef)
         return SoccerAction()
 
     # Action - Dégager la balle
@@ -135,6 +135,9 @@ class ComportementNaif(Comportement):
         advPos = self.advClosestBall()
         return self.ball_p.distance(advPos) > self.distance(self.ball_p)
 
+    def GoBall(self):
+        return self.go(self.ball_p)
+        
     @property
     def no_possession(self) :
         # Aucune équipe n'a la possesion de la balle
@@ -166,11 +169,11 @@ class ConditionDefenseur(ProxyObj):
     def close_ball(self):
         return self.me.distance(self.ball_p)<self.COEF_BALL*self.width
 
-    # Recherche - Positionner entre les cages et la balle (à mi-distance)
-    def defensivePos(self) :
-        initPos = self.getInitPos()
-        tmp = (self.ball_p-self.my_goal).normalize()*self.width*0.1 + self.my_goal
-        return Vector2D(x=((tmp.x + initPos.x) / 2.), y=((tmp.y + initPos.y) / 2.))
+    # Recherche - Positionner entre mes cages et le milieu du terrain (à mi-distance)
+    def defensivePos(self):
+        if self.my_team == 1:
+            return Vector2D(x=self.width/4, y=self.height/2)
+        return Vector2D(x=3*self.width/4, y=self.height/2)
 
     # Recherche - Adversaire à proximité (en fonction de la crainte)
     def advNearMe(self) :
@@ -189,6 +192,11 @@ def defenseur(I):
     if I.is_defense():
         return I.degage()+I.run(I.ball_p)
     return I.go((I.ball_p-I.my_goal).normalize()*I.width*0.1+I.my_goal)
+
+def defenseurMid(I):
+    if I.is_defense():
+        return I.degage()+I.run(I.ball_p)
+    return I.go(I.defensivePos())
 
 # Action - Défenseur traditionnel
 def defenseDT(I) :
@@ -269,7 +277,6 @@ class ConditionAttaque(ProxyObj):
 def forwardDT(I) :
     # Mise à jour de la position initiale
     #I.updateInitPos()
-
     # No team in possession ?
     if I.no_possession :
         # Can the player kick the ball ?
@@ -317,10 +324,8 @@ def fonceur(I) :
             return I.run(I.ball_p)
     else :
         if I.close_goal() :
-            I.updLastHit()
+            I.updateLastHit()
             return I.shoot()
-    I.updLastHit()
+    I.updateLastHit()
     if (I.advCloserThanMe()) :
         return I.degage()
-
-

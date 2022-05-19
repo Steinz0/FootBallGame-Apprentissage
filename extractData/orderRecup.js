@@ -1,29 +1,32 @@
 var Datastore = require('nedb')
 const fs = require('fs')
-const db1 = new Datastore({filename: '../app/database.db', autoload: true})
+const db1 = new Datastore({filename: '../app/Data/database.db', autoload: true})
 db1.loadDatabase(err => {
     if (err) console.log('Error Database Orders:', err); 
-    else console.log('MongoDB Orders OK!');
+    else getFeatures();
 });
 
-// Thi file able us to read nedb data. Nedb is a datastore which only js can read or write. 
+// This file able us to read nedb data. Nedb is a datastore which only js can read or write. 
 // We read the database and write in txt file with ; splitter
-db1.find({}, function (err, docs) {
-  docs.forEach(element => {
+
+function getFeatures(){
+  db1.find({}, function (err, docs) {
     content = ''
-    content += element.ballCoord + ';'
-    content += element.redCoords + ';'
-    content += element.blueCoords + ';'
-    content += element.score + ';'
-    content += element.actualPlayer + ';'
-    content += element.team + ';'
-    content += element.order + '\n'
-    fs.writeFile('order.txt', content,{ flag: 'a+' }, err => {
+    docs.forEach(element => {
+      content += element.ballCoord + ';'
+      content += element.redCoords + ';'
+      content += element.blueCoords + ';'
+      content += element.score + ';'
+      content += element.actualPlayer + ';'
+      content += element.team + ';'
+      content += element.order + '\n'
+    });
+    fs.writeFile('order.txt', content,{ flag: 'w+' }, err => {
         if (err) {
           console.error(err)
-          return
+          return 
         }
         //file written successfully
     })
   });
-});
+}
