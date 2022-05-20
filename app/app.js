@@ -153,7 +153,7 @@ async function Producer(req, res) {
     "celery"
   );
 
-  let task = client.createTask("simple_example.create_match");
+  let task = client.createTask("runGames.create_match");
   let result = task.applyAsync();
 
   result.get().then(data => {

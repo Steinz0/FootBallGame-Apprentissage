@@ -10,7 +10,7 @@ class ComportementNaif(Comportement):
     RUN_COEF = maxPlayerAcceleration / 2
     GO_COEF = maxPlayerAcceleration / 3
 
-    SHOOT_COEF = maxPlayerShoot * 2
+    SHOOT_COEF = maxPlayerShoot * 10000
     DRIBBLE_COEF = maxPlayerShoot
     THROW_COEF = maxPlayerShoot * 4
     PASS_COEF = maxPlayerShoot / 2.
@@ -34,12 +34,12 @@ class ComportementNaif(Comportement):
             shoot_coef = self.SHOOT_COEF
         if self.can_kick:
             return SoccerAction(shoot=(self.his_goal-self.ball_p).normalize()*shoot_coef)
-        return SoccerAction()
+        return self.GoBall()
 
     # Action - Dégager la balle
     def degage(self):
         if self.can_kick:
-            return SoccerAction(shoot=(self.ball_p - self.my_goal).normalize()*self.THROW_COEF)
+            return SoccerAction(shoot=(self.ball_p - self.my_goal).normalize()*self.SHOOT_COEF)
         return SoccerAction()
 
     # Action - Dribbler vers les cages
@@ -172,8 +172,8 @@ class ConditionDefenseur(ProxyObj):
     # Recherche - Positionner entre mes cages et le milieu du terrain (à mi-distance)
     def defensivePos(self):
         if self.my_team == 1:
-            return Vector2D(x=self.width/4, y=self.height/2)
-        return Vector2D(x=3*self.width/4, y=self.height/2)
+            return Vector2D(x=self.width/6, y=self.height/2)
+        return Vector2D(x=5*self.width/6, y=self.height/2)
 
     # Recherche - Adversaire à proximité (en fonction de la crainte)
     def advNearMe(self) :
@@ -196,7 +196,7 @@ def defenseur(I):
 def defenseurMid(I):
     if I.is_defense():
         return I.degage()+I.run(I.ball_p)
-    return I.go(I.defensivePos())
+    return I.go((I.ball_p-I.defensivePos()).normalize()*I.width*0.1+I.defensivePos())
 
 # Action - Défenseur traditionnel
 def defenseDT(I) :

@@ -61,7 +61,7 @@ def transform_state(state, id_team, id_player):
     return [[ballCoord, redCoords, blueCoords, score, actualPlayer, team]]
 
 # we take the matrix and generate features for ours ml models
-def get_features_y(matrix=None, filename=None, getY=True):
+def get_features_y(matrix=None, filename=None, getY=True, normalize=False):
     
     matrixBrut = []
     
@@ -91,33 +91,56 @@ def get_features_y(matrix=None, filename=None, getY=True):
         nbEnnemMyZone = 0
         nbEnnemnotMyZone = 0
 
+        closestAllyFront = +inf
+        closestEnnemFront = +inf
+        closestAllyBehind = +inf
+        closestEnnemBehind = +inf
+
         if team == "Red":
             distCagesAlly = dist(actualPlayer, redCages)
             distCagesEnnem = dist(actualPlayer, blueCages)
 
             for a in x[1]:
                 d = dist(actualPlayer, a)
-                if d < closestAlly:
-                    closestAlly == d
-                if a[0] < 600:
-                    nbAllyMyZone += 1
-                else:
-                    nbAllynotMyZone += 1
+
+                if d != 0:
+                    if d < closestAlly:
+                        closestAlly = d
+
+                    if a[0] <= actualPlayer[0]:
+                        if d < closestAllyBehind:
+                            closestAllyBehind = d
+                    else:
+                        if d < closestAllyFront:
+                            closestAllyFront = d
+                        
+                    if a[0] < 600:
+                        nbAllyMyZone += 1
+                    else:
+                        nbAllynotMyZone += 1
 
             for a in x[2]:
                 d = dist(actualPlayer, a)
+
                 if d < closestEnnem:
-                    closestEnnem == d
+                    closestEnnem = d
+                
+                if a[0] <= actualPlayer[0]:
+                    if d < closestEnnemBehind:
+                        closestEnnemBehind = d
+                else:
+                    if d < closestEnnemFront:
+                        closestEnnemFront = d
 
                 if a[0] < 600:
                     nbEnnemMyZone += 1
                 else:
                     nbEnnemnotMyZone += 1
             
-            if actualPlayer[0] < 600:
-                nbAllyMyZone -= 1
-            else:
-                nbAllynotMyZone -= 1
+            # if actualPlayer[0] < 600:
+            #     nbAllyMyZone -= 1
+            # else:
+            #     nbAllynotMyZone -= 1
 
         else:
             distCagesEnnem = dist(actualPlayer, redCages)
@@ -126,7 +149,7 @@ def get_features_y(matrix=None, filename=None, getY=True):
             for a in x[2]:
                 d = dist(actualPlayer, a)
                 if d < closestAlly:
-                    closestAlly == d
+                    closestAlly = d
                 if a[0] > 600:
                     nbAllyMyZone += 1
                 else:
@@ -135,7 +158,7 @@ def get_features_y(matrix=None, filename=None, getY=True):
             for a in x[1]:
                 d = dist(actualPlayer, a)
                 if d < closestEnnem:
-                    closestEnnem == d
+                    closestEnnem = d
 
                 if a[0] > 600:
                     nbEnnemMyZone += 1
@@ -147,6 +170,35 @@ def get_features_y(matrix=None, filename=None, getY=True):
             else:
                 nbAllynotMyZone -= 1
 
-        features.append(np.array([actualPlayer[0], actualPlayer[0], distBall, distCagesAlly, distCagesEnnem, nbAllyMyZone, nbEnnemMyZone, nbAllynotMyZone, nbEnnemnotMyZone]))
+        if closestEnnemFront == +inf:
+            closestEnnemFront = 10000
+        if closestAllyFront == +inf:
+            closestAllyFront = 10000
+        if closestEnnemBehind == +inf:
+            closestEnnemBehind = 10000
+        if closestAllyBehind == +inf:
+            closestAllyBehind = 10000
 
-    return np.array(features), np.array(y)
+        # features.append(np.array([actualPlayer[0], actualPlayer[1], distBall, distCagesAlly, distCagesEnnem, closestAlly, closestEnnem, nbAllyMyZone, nbEnnemMyZone, nbAllynotMyZone, nbEnnemnotMyZone]))
+        features.append(np.array([actualPlayer[0], actualPlayer[1], distBall, distCagesAlly, distCagesEnnem, closestAlly, closestEnnem, closestAllyFront, closestEnnemFront, closestAllyBehind, closestEnnemBehind, nbAllyMyZone, nbEnnemMyZone, nbAllynotMyZone, nbEnnemnotMyZone]))
+
+    features = np.array(features)
+
+    if normalize:
+        max = np.max(features, axis=0)
+        features = features/max
+
+    return features, np.array(y)
+
+
+# if __name__ == '__main__':
+#     m = extractDataBrut('./order.txt')
+
+#     print(m[0])
+
+#     f, y = get_features_y(matrix=m)
+#     max = np.max(f, axis=0)
+#     print(f'max: {max}')
+#     print(f'f[0]: {f[0]}')
+#     nf = f/max
+#     print(f'nf[0]: {nf[0]}')

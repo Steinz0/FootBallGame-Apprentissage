@@ -119,12 +119,9 @@ class KNNStrategy(Strategy):
         if self.predicts[(id_team, id_player)] == "defendCenter":
             I = ConditionDefenseur(ComportementNaif(SuperState(state, id_team, id_player), None))
             return defenseurMid(I)
-        # if self.predicts[(id_team, id_player)] == "defendBall":
-        #     I = ComportementNaif(SuperState(state,id_team,id_player), None)
-        #     return I.GoBall()
         if self.predicts[(id_team, id_player)] == "defendBall":
             I = ConditionAttaque(ComportementNaif(SuperState(state,id_team,id_player), self.last_hit))
-            return forwardDT(I)
+            return fonceur(I)
         if self.predicts[(id_team, id_player)] == "shootBall":
             I = ComportementNaif(SuperState(state,id_team,id_player), None)
             return I.shoot()
@@ -189,7 +186,7 @@ class SVMStrategy(Strategy):
             return defenseurMid(I)
         if self.predicts[(id_team, id_player)] == "defendBall":
             I = ConditionAttaque(ComportementNaif(SuperState(state,id_team,id_player), self.last_hit))
-            return forwardDT(I)
+            return fonceur(I)
         if self.predicts[(id_team, id_player)] == "shootBall":
             I = ComportementNaif(SuperState(state,id_team,id_player), None)
             return I.shoot()
