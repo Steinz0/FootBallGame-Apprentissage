@@ -68,102 +68,33 @@ def create_match(max_steps=1000):
     print(filename)
     return filename
 
-def tournoi():
-    #Pour creer un tournoi d equipes a 2 joueurs, de duree 2000, avec match retour
-    tournoi = SoccerTournament(nb_players=4, max_steps=2000,retour=True)
-
-    features, y = get_features_y(filename='../../extractData/order.txt')
 
 
-    lh = LastHit()
 
-    knn2 = st.KNNStrategy(features, y, 2,lh)
-    knn2.fit_model()
-    print('OK')
-    knn4 = st.KNNStrategy(features, y, 4,lh)
-    knn4.fit_model()
-    print('OK')
-    knn6 = st.KNNStrategy(features, y, 6,lh)
-    knn6.fit_model()
-    print('OK')
-    knn10 = st.KNNStrategy(features, y, 10,lh)
-    knn10.fit_model()
-    print('OK')
-    svm = st.SVMStrategy(features, y, lh)
-    svm.fit_model()
-    print('OK')
-
-    teamKNN2 = SoccerTeam(name="Team KNN 2")
-    teamKNN2.add("PyPlayer",knn2) 
-    teamKNN2.add("PyPlayer",knn2)
-    teamKNN2.add("PyPlayer",knn2)
-    teamKNN2.add("PyPlayer",knn2)
-
-    teamKNN4 = SoccerTeam(name="Team KNN 4")
-    teamKNN4.add("PyPlayer",knn4) 
-    teamKNN4.add("PyPlayer",knn4)
-    teamKNN4.add("PyPlayer",knn4)
-    teamKNN4.add("PyPlayer",knn4)
-
-    teamKNN6 = SoccerTeam(name="Team KNN 6")
-    teamKNN6.add("PyPlayer",knn6) 
-    teamKNN6.add("PyPlayer",knn6)
-    teamKNN6.add("PyPlayer",knn6)
-    teamKNN6.add("PyPlayer",knn6)
-
-    teamKNN10 = SoccerTeam(name="Team KNN 4")
-    teamKNN10.add("PyPlayer",knn10) 
-    teamKNN10.add("PyPlayer",knn10)
-    teamKNN10.add("PyPlayer",knn10)
-    teamKNN10.add("PyPlayer",knn10)
-
-    
-    teamSVM = SoccerTeam(name="Team SVM")
-    teamSVM.add("PyPlayer",svm) 
-    teamSVM.add("PyPlayer",svm)
-    teamSVM.add("PyPlayer",svm)
-    teamSVM.add("PyPlayer",svm)
-
-    #ajouter une equipe
-    tournoi.add_team(teamKNN2)
-    tournoi.add_team(teamKNN4)
-    tournoi.add_team(teamKNN6)
-    tournoi.add_team(teamKNN10)
-    tournoi.add_team(teamSVM)
-    #Jouer un tournoi (lance tous les matchs a la suite)
-    tournoi.play()
-    #visualiser un tournoi ou replay d un tournoi
-    #show(tournoi)
-    #afficher les scores
-    tournoi.format_scores()
-    tournoi.print_scores()
-
-
-# tournoi()
 # Match test pour les strategies
-max_steps=200
+# max_steps=200
 
-features, y = get_features_y(filename='../../extractData/order.txt')
+# features, y = get_features_y(filename='../../extractData/order.txt')
 
 
-lh = LastHit()
-knn = st.KNNStrategy(features, y, 4,lh, same_strat_step=1)
-knn.fit_model()
+# lh = LastHit()
+# knn = st.KNNStrategy(features, y, 4,lh, same_strat_step=1)
+# knn.fit_model()
 
-start = [st.ForwardStrategy(lh), st.DefenseurStrategy(lh)]
-# Création de l'équipe 1
-pyteam = get_team(1)
-thon = SoccerTeam(name="Team 1")
-# thon.add("PyPlayer",st.DefenseurStrategy(lh))
-thon.add("PyPlayer",knn)
+# start = [st.ForwardStrategy(lh), st.DefenseurStrategy(lh)]
+# # Création de l'équipe 1
+# pyteam = get_team(1)
+# thon = SoccerTeam(name="Team 1")
+# # thon.add("PyPlayer",st.DefenseurStrategy(lh))
+# thon.add("PyPlayer",knn)
 
-# Création de l'équipe 2
-thon2 = SoccerTeam(name="Team 2")
-thon2.add("PyPlayer",st.ForwardStrategy(lh)) 
-# thon2.add("PyPlayer",knn) 
+# # Création de l'équipe 2
+# thon2 = SoccerTeam(name="Team 2")
+# thon2.add("PyPlayer",st.ForwardStrategy(lh)) 
+# # thon2.add("PyPlayer",knn) 
 
-#Creation d'une partie
-simu = Simulation(thon,thon2,max_steps=max_steps, lasthit=lh)
-#Jouer et afficher la partie
-simu.start()
-show_simu(simu)
+# #Creation d'une partie
+# simu = Simulation(thon,thon2,max_steps=max_steps, lasthit=lh)
+# #Jouer et afficher la partie
+# simu.start()
+# show_simu(simu)
