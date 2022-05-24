@@ -29,6 +29,8 @@ clf.fit(features, y)
 # 0.7103658536585366
 print(clf.best_params_)
 print(clf.best_score_)
+
+input()
 params.append(clf.best_params_)
 score.append(clf.best_score_)
 
